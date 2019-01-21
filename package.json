@@ -1,0 +1,30 @@
+{
+  "name": "digital-oracles-prototype",
+  "version": "1.0.0",
+  "description": "",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "run-api": "node api/index.js",
+    "test": "truffle test --network ganache"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blockrockettech/digital-oracles-prototype.git"
+  },
+  "author": "james.morgan@blockrocket.tech",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blockrockettech/digital-oracles-prototype/issues"
+  },
+  "homepage": "https://github.com/blockrockettech/digital-oracles-prototype#readme",
+  "dependencies": {
+    "eth-gas-reporter": "^0.1.12",
+    "express": "^4.16.4",
+    "lodash": "^4.17.11",
+    "openzeppelin-solidity": "^2.1.2",
+    "truffle-hdwallet-provider": "^1.0.2",
+    "web3": "^1.0.0-beta.37"
+  }
+}
