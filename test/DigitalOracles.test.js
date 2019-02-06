@@ -146,7 +146,15 @@ contract('DigitalOracles tests', function (accounts) {
             const {state: newState} = await this.digitalOracles.getContract(CONTRACT_1);
             newState.should.be.bignumber.eq(State.Approved.toString());
 
-            await this.digitalOracles.addInvoiceToContract(CONTRACT_1, INVOICE_ID_2);
+            const {logs} = await this.digitalOracles.addInvoiceToContract(CONTRACT_1, INVOICE_ID_2);
+            expectEvent.inLogs(logs,
+                `InvoiceAdded`,
+                {
+                    contractId: new BN(CONTRACT_1),
+                    invoiceId: new BN(INVOICE_ID_2)
+                }
+            );
+
             const {invoiceIds} = await this.digitalOracles.getContract(CONTRACT_1);
             invoiceIds.map(i => i.toString()).should.be.deep.eq([
                 INVOICE_ID_1.toString(),

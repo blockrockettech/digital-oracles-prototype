@@ -1,6 +1,6 @@
 const DigitalOracles = artifacts.require("./DigitalOraclesOld.sol");
 const HDWalletProvider = require('truffle-hdwallet-provider');
-const {INFURA_KEY} = require('../api/const');
+const {INFURA_KEY} = require('../functions/const');
 
 module.exports = async function (deployer, network, accounts) {
 

@@ -1,0 +1,24 @@
+{
+  "name": "futbol-cards",
+  "description": "Cloud Functions for Futbol Cards",
+  "scripts": {
+    "serve": "firebase serve --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cheerio": "^1.0.0-rc.2",
+    "cors": "^2.8.4",
+    "firebase-admin": "~6.0.0",
+    "firebase-functions": "^2.1.0",
+    "lodash": "^4.17.10",
+    "axios": "latest"
+  },
+  "private": true,
+  "engines": {
+    "node": "8"
+  }
+}

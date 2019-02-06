@@ -1,0 +1,438 @@
+[
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "addWhitelisted",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "removeWhitelisted",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "isWhitelisted",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "renounceWhitelistAdmin",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "addWhitelistAdmin",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "isWhitelistAdmin",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "renounceWhitelisted",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "contractId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "name": "partyA",
+        "type": "uint256"
+      }
+    ],
+    "name": "ContractCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "contractId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "name": "partyB",
+        "type": "uint256"
+      }
+    ],
+    "name": "ContractPartyBAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "contractId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "name": "contractData",
+        "type": "bytes32"
+      }
+    ],
+    "name": "ContractApproved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "contractId",
+        "type": "uint256"
+      }
+    ],
+    "name": "ContractTerminated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "contractId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "name": "invoiceId",
+        "type": "uint256"
+      }
+    ],
+    "name": "InvoiceAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "WhitelistedAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "WhitelistedRemoved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "WhitelistAdminAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "WhitelistAdminRemoved",
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_contractId",
+        "type": "uint256"
+      },
+      {
+        "name": "_partyA",
+        "type": "uint256"
+      }
+    ],
+    "name": "createContract",
+    "outputs": [
+      {
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_contractId",
+        "type": "uint256"
+      },
+      {
+        "name": "_partyB",
+        "type": "uint256"
+      }
+    ],
+    "name": "setPartyBToContract",
+    "outputs": [
+      {
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_contractId",
+        "type": "uint256"
+      },
+      {
+        "name": "_partyB",
+        "type": "uint256"
+      },
+      {
+        "name": "_contractData",
+        "type": "bytes32"
+      }
+    ],
+    "name": "approveContract",
+    "outputs": [
+      {
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_contractId",
+        "type": "uint256"
+      },
+      {
+        "name": "_partyB",
+        "type": "uint256"
+      },
+      {
+        "name": "_contractData",
+        "type": "bytes32"
+      },
+      {
+        "name": "_invoiceId",
+        "type": "uint256"
+      }
+    ],
+    "name": "approveContract",
+    "outputs": [
+      {
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_contractId",
+        "type": "uint256"
+      }
+    ],
+    "name": "terminateContract",
+    "outputs": [
+      {
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_contractId",
+        "type": "uint256"
+      },
+      {
+        "name": "_invoiceId",
+        "type": "uint256"
+      }
+    ],
+    "name": "addInvoiceToContract",
+    "outputs": [
+      {
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_contractId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getContract",
+    "outputs": [
+      {
+        "name": "creationDate",
+        "type": "uint256"
+      },
+      {
+        "name": "partyA",
+        "type": "uint256"
+      },
+      {
+        "name": "partyB",
+        "type": "uint256"
+      },
+      {
+        "name": "state",
+        "type": "uint8"
+      },
+      {
+        "name": "contractData",
+        "type": "bytes32"
+      },
+      {
+        "name": "invoiceIds",
+        "type": "uint256[]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_contractId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getContractInvoices",
+    "outputs": [
+      {
+        "name": "invoiceIds",
+        "type": "uint256[]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

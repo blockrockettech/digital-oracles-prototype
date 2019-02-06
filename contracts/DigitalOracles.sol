@@ -43,134 +43,121 @@ contract DigitalOracles is WhitelistedRole {
     // Contract Setup //
     /////////////////////
 
-    function createContract(uint256 contractId, uint256 partyA)
+    function createContract(uint256 _contractId, uint256 _partyA)
     onlyWhitelisted
     public returns (uint256 _id) {
-        require(contractId != 0, "Invalid contract ID");
-        require(partyA != 0, "Invalid party ID");
-        require(contracts[contractId].state == State.Blank, "Contract already created");
+        require(_contractId != 0, "Invalid contract ID");
+        require(_partyA != 0, "Invalid party ID");
+        require(contracts[_contractId].state == State.Blank, "Contract already created");
 
         // Create Contract
-        contracts[contractId] = Contract(contractId, now, partyA, 0, State.Pending, bytes32(0x0));
+        contracts[_contractId] = Contract(_contractId, now, _partyA, 0, State.Pending, bytes32(0x0));
 
-        emit ContractCreated(contractId, partyA);
+        emit ContractCreated(_contractId, _partyA);
 
-        return contractId;
+        return _contractId;
     }
 
-    function setPartyBToContract(uint256 contractId, uint256 partyB)
+    function setPartyBToContract(uint256 _contractId, uint256 _partyB)
     onlyWhitelisted
     public returns (uint256 _id) {
-        require(contractId != 0, "Invalid contract ID");
-        require(partyB != 0, "Invalid party ID");
-        require(contracts[contractId].state == State.Pending, "Contract not in pending state");
+        require(_contractId != 0, "Invalid contract ID");
+        require(_partyB != 0, "Invalid party ID");
+        require(contracts[_contractId].state == State.Pending, "Contract not in pending state");
 
         // Update state
-        contracts[contractId].partyB = partyB;
+        contracts[_contractId].partyB = _partyB;
 
-        emit ContractPartyBAdded(contractId, partyB);
+        emit ContractPartyBAdded(_contractId, _partyB);
 
-        return contractId;
+        return _contractId;
     }
 
-    function approveContract(uint256 contractId, bytes32 contractData)
+    // TODO add override method for state?
+
+    function approveContract(uint256 _contractId, uint256 _partyB, bytes32 _contractData)
     onlyWhitelisted
     public returns (uint256 _id) {
-        require(contractId != 0, "Invalid contract ID");
-        require(contracts[contractId].state == State.Pending, "Contract not in pending state");
-        require(contracts[contractId].partyA != 0 && contracts[contractId].partyB != 0, "Not all parties set on the contract");
+        require(_contractId != 0, "Invalid contract ID");
+        require(_partyB != 0, "Invalid partyB ID");
+        require(contracts[_contractId].state == State.Pending, "Contract not in pending state");
 
-        contracts[contractId].state = State.Approved;
-        contracts[contractId].contractData = contractData;
+        contracts[_contractId].state = State.Approved;
+        contracts[_contractId].partyB = _partyB;
+        contracts[_contractId].contractData = _contractData;
 
-        emit ContractApproved(contractId, contractData);
+        emit ContractApproved(_contractId, _contractData);
 
-        return contractId;
+        return _contractId;
     }
 
-    function approveContract(uint256 contractId, uint256 partyB, bytes32 contractData)
+    function approveContract(uint256 _contractId, uint256 _partyB, bytes32 _contractData, uint256 _invoiceId)
     onlyWhitelisted
     public returns (uint256 _id) {
-        require(contractId != 0, "Invalid contract ID");
-        require(partyB != 0, "Invalid partyB ID");
-        require(contracts[contractId].state == State.Pending, "Contract not in pending state");
+        require(_contractId != 0, "Invalid contract ID");
+        require(_partyB != 0, "Invalid partyB ID");
+        require(contracts[_contractId].state == State.Pending, "Contract not in pending state");
 
-        contracts[contractId].state = State.Approved;
-        contracts[contractId].partyB = partyB;
-        contracts[contractId].contractData = contractData;
+        contracts[_contractId].state = State.Approved;
+        contracts[_contractId].partyB = _partyB;
+        contracts[_contractId].contractData = _contractData;
 
-        emit ContractApproved(contractId, contractData);
+        invoices[_contractId].push(_invoiceId);
 
-        return contractId;
+        emit ContractApproved(_contractId, _contractData);
+
+        return _contractId;
     }
 
-    function approveContract(uint256 contractId, uint256 partyB, bytes32 contractData, uint256 invoiceId)
+    function terminateContract(uint256 _contractId)
     onlyWhitelisted
     public returns (uint256 _id) {
-        require(contractId != 0, "Invalid contract ID");
-        require(partyB != 0, "Invalid partyB ID");
-        require(contracts[contractId].state == State.Pending, "Contract not in pending state");
+        require(_contractId != 0, "Invalid contract ID");
+        require(contracts[_contractId].state == State.Pending, "Contract not in pending state");
 
-        contracts[contractId].state = State.Approved;
-        contracts[contractId].partyB = partyB;
-        contracts[contractId].contractData = contractData;
+        contracts[_contractId].state = State.Terminated;
 
-        invoices[contractId].push(invoiceId);
+        emit ContractTerminated(_contractId);
 
-        emit ContractApproved(contractId, contractData);
-
-        return contractId;
-    }
-
-    function terminateContract(uint256 contractId)
-    onlyWhitelisted
-    public returns (uint256 _id) {
-        require(contractId != 0, "Invalid contract ID");
-        require(contracts[contractId].state == State.Pending, "Contract not in pending state");
-
-        contracts[contractId].state = State.Terminated;
-
-        emit ContractTerminated(contractId);
-
-        return contractId;
+        return _contractId;
     }
 
 
-    function addInvoiceToContract(uint256 contractId, uint256 invoiceId)
+    function addInvoiceToContract(uint256 _contractId, uint256 _invoiceId)
     onlyWhitelisted
     public returns (uint256 _id) {
-        require(contractId != 0, "Invalid contract ID");
-        require(contracts[contractId].state == State.Pending || contracts[contractId].state == State.Approved, "Contract not in pending state");
+        require(_contractId != 0, "Invalid contract ID");
+        require(contracts[_contractId].state == State.Pending || contracts[_contractId].state == State.Approved, "Contract not in pending state");
 
-        invoices[contractId].push(invoiceId);
+        invoices[_contractId].push(_invoiceId);
 
-        emit InvoiceAdded(contractId, invoiceId);
+        emit InvoiceAdded(_contractId, _invoiceId);
 
-        return contractId;
+        return _contractId;
     }
 
     ///////////////////
     // Query Methods //
     ///////////////////
 
-    function getContract(uint256 _id)
+    function getContract(uint256 _contractId)
     public view
     returns (uint256 creationDate, uint256 partyA, uint256 partyB, State state, bytes32 contractData, uint256[] memory invoiceIds) {
-        Contract memory _contract = contracts[_id];
+        Contract memory _contract = contracts[_contractId];
         return (
         _contract.creationDate,
         _contract.partyA,
         _contract.partyB,
         _contract.state,
         _contract.contractData,
-        invoices[_id]
+        invoices[_contractId]
         );
     }
 
-    function getContractInvoices(uint256 _id)
+    function getContractInvoices(uint256 _contractId)
     public view
     returns (uint256[] memory invoiceIds) {
-        return invoices[_id];
+        return invoices[_contractId];
     }
 
 }
