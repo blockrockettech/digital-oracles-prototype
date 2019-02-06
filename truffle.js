@@ -1,16 +1,8 @@
-const HDWalletProvider = require('truffle-hdwallet-provider');
-const infuraApikey = '';
-
 // Check gas prices before live deploy - https://ethgasstation.info/
 
 module.exports = {
   mocha: {
-    useColors: true,
-    reporter: 'eth-gas-reporter',
-    reporterOptions: {
-      currency: 'USD',
-      gasPrice: 3
-    }
+    useColors: true
   },
   compilers: {
     solc: {

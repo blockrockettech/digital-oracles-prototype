@@ -1,4 +1,4 @@
-const DigitalOracles = artifacts.require("./DigitalOracles.sol");
+const DigitalOracles = artifacts.require("./DigitalOraclesOld.sol");
 
 module.exports = async function (deployer) {
     await deployer.deploy(DigitalOracles);

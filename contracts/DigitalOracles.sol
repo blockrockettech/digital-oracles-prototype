@@ -1,264 +1,150 @@
 pragma solidity ^0.5.0;
 
-import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
+import "openzeppelin-solidity/contracts/access/roles/WhitelistedRole.sol";
 
-contract DigitalOracles is Ownable {
-
-    struct Party {
-        uint256 id;
-        uint256 creationDate;
-        string name;
-        bool active;
-    }
-
-    struct ContractType {
-        uint256 id;
-        uint256 creationDate;
-        string name;
-        bool active;
-    }
+contract DigitalOracles is WhitelistedRole {
 
     struct Contract {
-        uint256 id;
-        uint256 creationDate;
-        string name;
-        uint256 contractType;
-        uint256 partyA;
-        uint256 partyB;
-        bool active;
+        uint256 contractId;     // The contract ID
+        uint256 creationDate;   // When the contract was created
+        uint256 partyA;         // Party B ID
+        uint256 partyB;         // Party A ID
+        State state;            // The contract state
+        bytes32 contractData;   // The IPFS hash of the approved contract
     }
 
-    struct Approval {
-        uint256 partyId;
-        ApprovalState state;
-        uint256 updateDatetime;
-    }
-
-    struct Settlement {
-        ApprovalState state;
-        uint256 updateDatetime;
-        Approval partyAApproval;
-        Approval partyBApproval;
-    }
-
-    enum ApprovalState {Pending, Approved, Rejected}
+    enum State {Blank, Pending, Approved, Terminated}
 
     ////////////
     // Events //
     ////////////
 
-    event ContractTypeAdded(uint256 indexed id);
-    event ContractTypeUpdated(uint256 indexed id);
-    event ContractTypeDisabled(uint256 indexed id);
-    event ContractTypeEnabled(uint256 indexed id);
-
-    event PartyAdded(uint256 indexed id);
-    event PartyUpdated(uint256 indexed id);
-    event PartyEnabled(uint256 indexed id);
-    event PartyDisabled(uint256 indexed id);
-
-    event ContractAdded(uint256 indexed id);
-    event ContractUpdated(uint256 indexed id);
-    event ContractEnabled(uint256 indexed id);
-    event ContractDisabled(uint256 indexed id);
-
-    // type ID -> ContractType
-    mapping(uint256 => ContractType) contractTypes;
-
-    // party ID -> Party
-    mapping(uint256 => Party) parties;
+    event ContractCreated(uint256 indexed contractId, uint256 indexed partyA);
+    event ContractPartyBAdded(uint256 indexed contractId, uint256 indexed partyB);
+    event ContractApproved(uint256 indexed contractId, bytes32 indexed contractData);
+    event ContractTerminated(uint256 indexed contractId);
+    event InvoiceAdded(uint256 indexed contractId, uint256 indexed invoiceId);
 
     // contract ID -> Contract
-    mapping(uint256 => Contract) contractToContract;
+    mapping(uint256 => Contract) contracts;
 
-    // contract ID -> Settlement
-    mapping(uint256 => Settlement) contractToSettlement;
-
-    ///////////////////////////
-    // Contract Types Setup //
-    ///////////////////////////
-
-    function createContractType(uint256 contractTypeId, string memory name, bool active) public onlyOwner returns (uint256 _id) {
-        require(contractTypeId != 0, "Invalid ID");
-        require(contractTypes[contractTypeId].id == 0, "Cant create a type with the same ID");
-
-        contractTypes[contractTypeId] = ContractType(contractTypeId, now, name, active);
-
-        emit ContractTypeAdded(contractTypeId);
-
-        return contractTypeId;
-    }
-
-    function updateContractType(uint256 contractTypeId, string memory name) public onlyOwner returns (uint256 _id) {
-        require(contractTypes[contractTypeId].id != 0, "Cant create a type with the same ID");
-
-        contractTypes[contractTypeId].name = name;
-
-        emit ContractTypeUpdated(contractTypeId);
-
-        return contractTypeId;
-    }
-
-    function disableContractType(uint256 contractTypeId) public onlyOwner returns (uint256 _id)  {
-        require(contractTypes[contractTypeId].id != 0, "Invalid ID");
-
-        contractTypes[contractTypeId].active = false;
-
-        emit ContractTypeDisabled(contractTypeId);
-
-        return contractTypeId;
-    }
-
-    function enableContractType(uint256 contractTypeId) public onlyOwner returns (uint256 _id)  {
-        require(contractTypes[contractTypeId].id != 0, "Invalid ID");
-
-        contractTypes[contractTypeId].active = true;
-
-        emit ContractTypeEnabled(contractTypeId);
-
-        return contractTypeId;
-    }
+    // contract ID -> invoice array
+    mapping(uint256 => uint256[]) invoices;
 
     /////////////////
-    // Party Setup //
+    // Constructor //
     /////////////////
 
-    function createParty(uint256 partyId, string memory name, bool active) public onlyOwner returns (uint256 _id) {
-        require(partyId != 0, "Invalid ID");
-        require(parties[partyId].id == 0, "Cant create a party with the same ID");
-
-        parties[partyId] = Party(partyId, now, name, active);
-
-        emit PartyAdded(partyId);
-
-        return partyId;
-    }
-
-    function updateParty(uint256 partyId, string memory name) public onlyOwner returns (uint256 _id) {
-        require(parties[partyId].id != 0, "Cant create a party with the same ID");
-
-        parties[partyId].name = name;
-
-        emit PartyUpdated(partyId);
-
-        return partyId;
-    }
-
-    function disableParty(uint256 partyId) public onlyOwner returns (uint256 _id) {
-        require(parties[partyId].id != 0, "Invalid ID");
-
-        parties[partyId].active = false;
-
-        emit PartyDisabled(partyId);
-
-        return partyId;
-    }
-
-    function enableParty(uint256 partyId) public onlyOwner returns (uint256 _id) {
-        require(parties[partyId].id != 0, "Invalid ID");
-
-        parties[partyId].active = true;
-
-        emit PartyEnabled(partyId);
-
-        return partyId;
+    constructor () public{
+        super.addWhitelisted(msg.sender);
     }
 
     /////////////////////
     // Contract Setup //
     /////////////////////
 
-    function createContract(uint256 contractId, string memory name, uint256 contractTypeId, uint256 partyAId, uint256 partyBId) public onlyOwner returns (uint256 _id) {
-        require(contractId != 0, "Invalid ID");
-        require(contractToContract[contractId].id == 0, "Cant create a contract with the same ID");
-        require(parties[partyAId].id != 0, "Invalid Party A ID");
-        require(parties[partyBId].id != 0, "Invalid Party B ID");
-        require(contractTypes[contractTypeId].id != 0, "Invalid contract type ID");
+    function createContract(uint256 contractId, uint256 partyA)
+    onlyWhitelisted
+    public returns (uint256 _id) {
+        require(contractId != 0, "Invalid contract ID");
+        require(partyA != 0, "Invalid party ID");
+        require(contracts[contractId].state == State.Blank, "Contract already created");
 
         // Create Contract
-        contractToContract[contractId] = Contract(contractId, now, name, contractTypeId, partyAId, partyBId, true);
+        contracts[contractId] = Contract(contractId, now, partyA, 0, State.Pending, bytes32(0x0));
 
-        // Default settlement
-        contractToSettlement[contractId].partyAApproval = Approval(partyAId, ApprovalState.Pending, 0);
-        contractToSettlement[contractId].partyBApproval = Approval(partyBId, ApprovalState.Pending, 0);
-
-        emit ContractAdded(contractId);
+        emit ContractCreated(contractId, partyA);
 
         return contractId;
     }
 
-    // FIXME this is really a reset?
-    function updateContract(uint256 contractId, string memory name, uint256 contractTypeId, uint256 partyAId, uint256 partyBId) public onlyOwner returns (uint256 _id) {
-        require(contractId != 0, "Invalid ID");
-        require(contractToContract[contractId].id != 0, "Cant create a contract with the same ID");
-        require(parties[partyAId].id != 0, "Invalid Party A ID");
-        require(parties[partyBId].id != 0, "Invalid Party B ID");
-        require(contractTypes[contractTypeId].id != 0, "Invalid contract type ID");
+    function setPartyBToContract(uint256 contractId, uint256 partyB)
+    onlyWhitelisted
+    public returns (uint256 _id) {
+        require(contractId != 0, "Invalid contract ID");
+        require(partyB != 0, "Invalid party ID");
+        require(contracts[contractId].state == State.Pending, "Contract not in pending state");
 
-        contractToContract[contractId] = Contract(contractId, now, name, contractTypeId, partyAId, partyBId, true);
+        // Update state
+        contracts[contractId].partyB = partyB;
 
-        emit ContractUpdated(contractId);
-
-        return contractId;
-    }
-
-    function disableContract(uint256 contractId) public onlyOwner returns (uint256 _id) {
-        require(contractToContract[contractId].id != 0, "Invalid ID");
-
-        contractToContract[contractId].active = false;
-
-        emit ContractDisabled(contractId);
+        emit ContractPartyBAdded(contractId, partyB);
 
         return contractId;
     }
 
-    function enableContract(uint256 contractId) public onlyOwner returns (uint256 _id) {
-        require(contractToContract[contractId].id != 0, "Invalid ID");
+    function approveContract(uint256 contractId, bytes32 contractData)
+    onlyWhitelisted
+    public returns (uint256 _id) {
+        require(contractId != 0, "Invalid contract ID");
+        require(contracts[contractId].state == State.Pending, "Contract not in pending state");
+        require(contracts[contractId].partyA != 0 && contracts[contractId].partyB != 0, "Not all parties set on the contract");
 
-        contractToContract[contractId].active = true;
+        contracts[contractId].state = State.Approved;
+        contracts[contractId].contractData = contractData;
 
-        emit ContractEnabled(contractId);
+        emit ContractApproved(contractId, contractData);
 
         return contractId;
     }
 
-    /////////////////////////
-    // Contract Settlement //
-    /////////////////////////
+    function approveContract(uint256 contractId, uint256 partyB, bytes32 contractData)
+    onlyWhitelisted
+    public returns (uint256 _id) {
+        require(contractId != 0, "Invalid contract ID");
+        require(partyB != 0, "Invalid partyB ID");
+        require(contracts[contractId].state == State.Pending, "Contract not in pending state");
 
-    function settleContract(uint256 contractId, uint256 partyId, ApprovalState state) public onlyOwner returns (uint256 _id) {
-        require(contractId != 0, "Invalid ID");
+        contracts[contractId].state = State.Approved;
+        contracts[contractId].partyB = partyB;
+        contracts[contractId].contractData = contractData;
 
-        Contract storage con = contractToContract[contractId];
-        require(con.id != 0, "No contract found");
+        emit ContractApproved(contractId, contractData);
 
-        Settlement storage settlement = contractToSettlement[contractId];
+        return contractId;
+    }
 
-        if (con.partyA == partyId) {
-            settlement.partyAApproval = Approval(partyId, state, now);
-        }
-        else if (con.partyB == partyId) {
-            settlement.partyBApproval = Approval(partyId, state, now);
-        }
-        else {
-            // throw error if no parties found to match for the provided party
-            revert("No matched parties for the provided contract");
-        }
+    function approveContract(uint256 contractId, uint256 partyB, bytes32 contractData, uint256 invoiceId)
+    onlyWhitelisted
+    public returns (uint256 _id) {
+        require(contractId != 0, "Invalid contract ID");
+        require(partyB != 0, "Invalid partyB ID");
+        require(contracts[contractId].state == State.Pending, "Contract not in pending state");
 
-        // Update to fully approved if match
-        if (settlement.partyAApproval.state == ApprovalState.Approved && settlement.partyBApproval.state == ApprovalState.Approved) {
-            settlement.state = ApprovalState.Approved;
-        }
-        // Update to fully rejected if match
-        else if (settlement.partyAApproval.state == ApprovalState.Rejected && settlement.partyBApproval.state == ApprovalState.Rejected) {
-            settlement.state = ApprovalState.Rejected;
-        }
-        else {
-            settlement.state = ApprovalState.Pending;
-        }
+        contracts[contractId].state = State.Approved;
+        contracts[contractId].partyB = partyB;
+        contracts[contractId].contractData = contractData;
 
-        // Always save last updated
-        settlement.updateDatetime = now;
+        invoices[contractId].push(invoiceId);
+
+        emit ContractApproved(contractId, contractData);
+
+        return contractId;
+    }
+
+    function terminateContract(uint256 contractId)
+    onlyWhitelisted
+    public returns (uint256 _id) {
+        require(contractId != 0, "Invalid contract ID");
+        require(contracts[contractId].state == State.Pending, "Contract not in pending state");
+
+        contracts[contractId].state = State.Terminated;
+
+        emit ContractTerminated(contractId);
+
+        return contractId;
+    }
+
+
+    function addInvoiceToContract(uint256 contractId, uint256 invoiceId)
+    onlyWhitelisted
+    public returns (uint256 _id) {
+        require(contractId != 0, "Invalid contract ID");
+        require(contracts[contractId].state == State.Pending || contracts[contractId].state == State.Approved, "Contract not in pending state");
+
+        invoices[contractId].push(invoiceId);
+
+        emit InvoiceAdded(contractId, invoiceId);
 
         return contractId;
     }
@@ -267,68 +153,24 @@ contract DigitalOracles is Ownable {
     // Query Methods //
     ///////////////////
 
-    function getContractType(uint256 _id)
-    public view
-    returns (uint256 id, uint256 creationDate, string memory name, bool active) {
-        ContractType memory _contractType = contractTypes[_id];
-        return (
-        _contractType.id,
-        _contractType.creationDate,
-        _contractType.name,
-        _contractType.active
-        );
-    }
-
-    function getParty(uint256 _id)
-    public view
-    returns (uint256 id, uint256 creationDate, string memory name, bool active) {
-        Party memory _party = parties[_id];
-        return (
-        _party.id,
-        _party.creationDate,
-        _party.name,
-        _party.active
-        );
-    }
-
     function getContract(uint256 _id)
     public view
-    returns (uint256 id, uint256 creationDate, string memory name, uint256 contractType, uint256 partyA, uint256 partyB, bool active) {
-        Contract memory _contract = contractToContract[_id];
+    returns (uint256 creationDate, uint256 partyA, uint256 partyB, State state, bytes32 contractData, uint256[] memory invoiceIds) {
+        Contract memory _contract = contracts[_id];
         return (
-        _contract.id,
         _contract.creationDate,
-        _contract.name,
-        _contract.contractType,
         _contract.partyA,
         _contract.partyB,
-        _contract.active
+        _contract.state,
+        _contract.contractData,
+        invoices[_id]
         );
     }
 
-    function getSettlement(uint256 _id)
+    function getContractInvoices(uint256 _id)
     public view
-    returns (
-        ApprovalState state,
-        uint256 updateDatetime,
-        uint256 partyA,
-        ApprovalState partyAState,
-        uint256 partyAUpdateDatetime,
-        uint256 partyB,
-        ApprovalState partyBState,
-        uint256 partyBUpdateDatetime
-    ) {
-        Settlement memory _settlement = contractToSettlement[_id];
-        return (
-        _settlement.state,
-        _settlement.updateDatetime,
-        _settlement.partyAApproval.partyId,
-        _settlement.partyAApproval.state,
-        _settlement.partyAApproval.updateDatetime,
-        _settlement.partyBApproval.partyId,
-        _settlement.partyBApproval.state,
-        _settlement.partyBApproval.updateDatetime
-        );
+    returns (uint256[] memory invoiceIds) {
+        return invoices[_id];
     }
 
 }
