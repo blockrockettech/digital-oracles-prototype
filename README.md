@@ -34,7 +34,7 @@ The project contains the following:
         * ensure that the deployed contract address is correct - updating it here `./functions/api/web3/network.js` 
     * Start the API `./run_app.sh` **(permission will need to be granted in order to run the app under the same project name)**
 
-#### Requiring a network ID
+#### Network ID
 
 * Networks are as follows:
 
@@ -44,3 +44,14 @@ The project contains the following:
 | ropsten | 3 |
 | rinkeby  | 4 |
 | mainnet  | 1 |
+
+#### API Hosts
+
+* local: http://localhost:5000/digital-oracles/us-central1
+* deployed: https://us-central1-digital-oracles.cloudfunctions.net
+
+### Deployed Contracts
+* (Ropsten) https://ropsten.etherscan.io/address/0xae7fd5f460ff90fdcb86963de4c3dddd237614ad
+
+### GAS constraints
+* Each transaction will get the latest standard GAS price, if this reaches above the value in `functions/const.js` - `MAX_GAS_PRICE` the txs will fail 
