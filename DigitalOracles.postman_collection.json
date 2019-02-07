@@ -56,7 +56,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"partyB\": 1\n}"
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 10,\n    \"partyB\": 1\n}"
 						},
 						"url": {
 							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/approve",
@@ -283,7 +283,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/5777/0x3c36907084318babd10f1172f1eaa2d923a7544801ceedad90614db1b324a4c4/receipt",
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/5777/0x4fa241debbd487630cf2a9ba8aee5de3b28fb0bb07901401a58d28b3302f09fb/receipt",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -295,7 +295,7 @@
 								"api",
 								"chain",
 								"5777",
-								"0x3c36907084318babd10f1172f1eaa2d923a7544801ceedad90614db1b324a4c4",
+								"0x4fa241debbd487630cf2a9ba8aee5de3b28fb0bb07901401a58d28b3302f09fb",
 								"receipt"
 							]
 						}
@@ -322,7 +322,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/5777/0x3c36907084318babd10f1172f1eaa2d923a7544801ceedad90614db1b324a4c4/raw",
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/5777/0x4fa241debbd487630cf2a9ba8aee5de3b28fb0bb07901401a58d28b3302f09fb/raw",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -334,7 +334,7 @@
 								"api",
 								"chain",
 								"5777",
-								"0x3c36907084318babd10f1172f1eaa2d923a7544801ceedad90614db1b324a4c4",
+								"0x4fa241debbd487630cf2a9ba8aee5de3b28fb0bb07901401a58d28b3302f09fb",
 								"raw"
 							]
 						}
@@ -414,6 +414,43 @@
 								"5777",
 								"account",
 								"balance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Gas Price",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/gasPrice",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"chain",
+								"gasPrice"
 							]
 						}
 					},

@@ -9,6 +9,7 @@ The project contains the following:
 * Smart Contract migrations `./migrations`
 * Serverless API located in `./functions`
     * Note this has its own `node_modules` and `package.json` different from the root project
+* Postman API collection can be imported from `DigitalOracles.postman_collection.json` 
 
 #### Installation
 
@@ -21,7 +22,7 @@ The project contains the following:
     * `npm install` - install all dependencies
     * `npm run test` - runs all truffle tests
     * `./run_app.sh` - starts up the API
-    * `./firebase_deploy.sh` - deploys the app to live (permission will need to be granted)
+    * `./firebase_deploy.sh` - deploys the app to live **(permission will need to be granted)**
     * `./clean_deploy_local.sh` - will deploy all contracts to your local blockchain
 
 * Running everything locally
@@ -30,4 +31,4 @@ The project contains the following:
     * Once installed you will need to update two pieces of information
         * Copy the private key from your local `Ganache` account to `./functions/api/web3/privateKey.js`
         * ensure that the deployed contract address is correct - updating it here `./functions/api/web3/network.js` 
-    * Start the API `./run_app.sh`
+    * Start the API `./run_app.sh` **(permission will need to be granted in order to run the app under the same project name)**
