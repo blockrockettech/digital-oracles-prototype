@@ -29,7 +29,7 @@ contracts.post('/approve', async (req, res) => {
     const {contractId, partyB, contractData, network} = req.body;
 
     // optional so we cant explode
-    const invoiceId =  req.body.invoiceId;
+    const invoiceId = req.body.invoiceId;
 
     const results = await digitalOraclesService.approveContract(getNetwork(network), contractId, partyB, contractData, invoiceId);
 
@@ -42,6 +42,37 @@ contracts.post('/terminate', async (req, res) => {
     const {contractId, network} = req.body;
 
     const results = await digitalOraclesService.terminateContract(getNetwork(network), contractId);
+
+    return res
+        .status(200)
+        .json(results);
+});
+
+contracts.get('/:network/details/:contractId/', async (req, res) => {
+    const {contractId, network} = req.params;
+
+    const results = await digitalOraclesService.getContract(getNetwork(network), contractId);
+
+    return res
+        .status(200)
+        .json(results);
+});
+
+contracts.post('/invoices/add', async (req, res) => {
+    const {network, contractId, invoiceId} = req.body;
+
+    const results = await digitalOraclesService.addInvoiceToContract(getNetwork(network), contractId, invoiceId);
+
+    return res
+        .status(200)
+        .json(results);
+});
+
+
+contracts.get('/:network/invoices/:contractId/', async (req, res) => {
+    const {network, contractId} = req.body;
+
+    const results = await digitalOraclesService.getContractInvoices(getNetwork(network), contractId);
 
     return res
         .status(200)

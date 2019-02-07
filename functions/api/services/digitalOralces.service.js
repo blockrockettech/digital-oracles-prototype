@@ -42,7 +42,7 @@ class DigitalOraclesService {
         let data = null;
         if (!_.isUndefined(invoiceId)) {
             data = DigitalOracles.methods['approveContract(uint256,uint256,bytes32,uint256)'](contractId, partyB, contractData, invoiceId).encodeABI();
-        } if (contractData) {
+        } else if (contractData) {
             data = DigitalOracles.methods['approveContract(uint256,uint256,bytes32)'](contractId, partyB, contractData).encodeABI();
         }
 
@@ -74,11 +74,36 @@ class DigitalOraclesService {
     }
 
     async getContract(network, contractId) {
+        console.log(network, contractId);
 
+        const web3 = httpProvider(network);
+        const address = getAddress(network);
+        const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
+
+        const result = await DigitalOracles.methods.getContract(contractId).call();
+
+        return {
+            creationDate: result.creationDate,
+            partyA: result.partyA,
+            partyB: result.partyB,
+            state: result.state,
+            contractData: result.contractData,
+            invoiceIds: result.invoiceIds
+        };
     }
 
     async getContractInvoices(network, contractId) {
+        console.log(network, contractId);
 
+        const web3 = httpProvider(network);
+        const address = getAddress(network);
+        const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
+
+        const {invoiceIds} = await DigitalOracles.methods.getContractInvoices(contractId).call();
+
+        return {
+            invoiceIds
+        };
     }
 
     async sendTxs(web3, data, address, network) {
@@ -107,7 +132,8 @@ class DigitalOraclesService {
                         transactionHash: hash
                     });
                 })
-                .catch((error) => {
+                // If a out of gas error, the second parameter is the receipt.
+                .on('error', (error) => {
                     console.log('Failed to submit transaction', error);
                     reject({
                         success: true,

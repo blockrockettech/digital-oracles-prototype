@@ -141,7 +141,7 @@ contract DigitalOracles is WhitelistedRole {
     ///////////////////
 
     function getContract(uint256 _contractId)
-    public view
+    external view
     returns (uint256 creationDate, uint256 partyA, uint256 partyB, State state, bytes32 contractData, uint256[] memory invoiceIds) {
         Contract memory _contract = contracts[_contractId];
         return (
@@ -155,7 +155,7 @@ contract DigitalOracles is WhitelistedRole {
     }
 
     function getContractInvoices(uint256 _contractId)
-    public view
+    external view
     returns (uint256[] memory invoiceIds) {
         return invoices[_contractId];
     }

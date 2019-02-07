@@ -1,4 +1,4 @@
-const DigitalOracles = artifacts.require("./DigitalOraclesOld.sol");
+const DigitalOracles = artifacts.require("./DigitalOracles.sol");
 const HDWalletProvider = require('truffle-hdwallet-provider');
 const {INFURA_KEY} = require('../functions/const');
 

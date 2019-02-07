@@ -2,8 +2,8 @@ const Web3 = require('web3');
 
 const {INFURA_KEY} = require('../../const');
 
-let httpProviderWeb3 = {};
-let webSocketWeb3 = {};
+const httpProviderWeb3 = {};
+const webSocketWeb3 = {};
 
 const webSocket = (network) => {
     if (webSocketWeb3[network]) {

@@ -10,12 +10,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const contract = require('./api/routes/contract');
-const invoice = require('./api/routes/invoice');
-const transactions = require('./api/routes/transactions');
+const chain = require('./api/routes/chain');
 
 app.use('/contracts', contract);
-app.use('/invoices', invoice);
-app.use('/transactions', transactions);
+app.use('/chain', chain);
 
 // Expose Express API as a single Cloud Function:
 exports.api = functions.https.onRequest(app);
