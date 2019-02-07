@@ -172,6 +172,24 @@
         "indexed": true,
         "name": "contractId",
         "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "name": "state",
+        "type": "uint8"
+      }
+    ],
+    "name": "ContractStateChanged",
+    "type": "event",
+    "signature": "0x9457c2cd66a144975542c6fa2d94bc9e2fc20b498caaca45052ded00530d899e"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "contractId",
+        "type": "uint256"
       }
     ],
     "name": "ContractTerminated",
@@ -295,6 +313,30 @@
     "stateMutability": "nonpayable",
     "type": "function",
     "signature": "0x9dfe5642"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_contractId",
+        "type": "uint256"
+      },
+      {
+        "name": "_state",
+        "type": "uint8"
+      }
+    ],
+    "name": "setContractState",
+    "outputs": [
+      {
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xb58f97bb"
   },
   {
     "constant": false,

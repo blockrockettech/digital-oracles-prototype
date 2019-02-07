@@ -29,7 +29,7 @@ const getAddress = (network) => {
         mainnet: '',
         ropsten: '',
         rinkeby: '',
-        local: '0xa72066b43b1Ff07f1c7f242953fC38f1c4da59A7'
+        local: '0x6510C97786EeAE98478674D038b1c9b742e62EA0'
     });
 };
 

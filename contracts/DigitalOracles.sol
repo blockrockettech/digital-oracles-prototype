@@ -22,6 +22,7 @@ contract DigitalOracles is WhitelistedRole {
     event ContractCreated(uint256 indexed contractId, uint256 indexed partyA);
     event ContractPartyBAdded(uint256 indexed contractId, uint256 indexed partyB);
     event ContractApproved(uint256 indexed contractId, bytes32 indexed contractData);
+    event ContractStateChanged(uint256 indexed contractId, State indexed state);
     event ContractTerminated(uint256 indexed contractId);
     event InvoiceAdded(uint256 indexed contractId, uint256 indexed invoiceId);
 
@@ -73,7 +74,18 @@ contract DigitalOracles is WhitelistedRole {
         return _contractId;
     }
 
-    // TODO add override method for state?
+    function setContractState(uint256 _contractId, State _state)
+    onlyWhitelisted
+    public returns (uint256 _id) {
+        require(_contractId != 0, "Invalid contract ID");
+        require(contracts[_contractId].state == State.Blank, "Contract not created");
+
+        contracts[_contractId].state = _state;
+
+        emit ContractStateChanged(_contractId, _state);
+
+        return _contractId;
+    }
 
     function approveContract(uint256 _contractId, uint256 _partyB, bytes32 _contractData)
     onlyWhitelisted
