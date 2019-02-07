@@ -21,7 +21,7 @@ contract DigitalOracles is WhitelistedRole {
 
     event ContractCreated(uint256 indexed contractId, uint256 indexed partyA);
     event ContractPartyBAdded(uint256 indexed contractId, uint256 indexed partyB);
-    event ContractApproved(uint256 indexed contractId, string indexed contractData);
+    event ContractApproved(uint256 indexed contractId, string contractData);
     event ContractStateChanged(uint256 indexed contractId, State indexed state);
     event ContractTerminated(uint256 indexed contractId);
     event InvoiceAdded(uint256 indexed contractId, uint256 indexed invoiceId);
@@ -65,6 +65,7 @@ contract DigitalOracles is WhitelistedRole {
         require(_contractId != 0, "Invalid contract ID");
         require(_partyB != 0, "Invalid party ID");
         require(contracts[_contractId].state == State.Pending, "Contract not in pending state");
+        require(contracts[_contractId].partyA != _partyB, "PartyA and PartyB cannot be the same");
 
         // Update state
         contracts[_contractId].partyB = _partyB;
@@ -93,6 +94,7 @@ contract DigitalOracles is WhitelistedRole {
         require(_contractId != 0, "Invalid contract ID");
         require(_partyB != 0, "Invalid partyB ID");
         require(contracts[_contractId].state == State.Pending, "Contract not in pending state");
+        require(contracts[_contractId].partyA != _partyB, "PartyA and PartyB cannot be the same");
 
         contracts[_contractId].state = State.Approved;
         contracts[_contractId].partyB = _partyB;
@@ -109,6 +111,7 @@ contract DigitalOracles is WhitelistedRole {
         require(_contractId != 0, "Invalid contract ID");
         require(_partyB != 0, "Invalid partyB ID");
         require(contracts[_contractId].state == State.Pending, "Contract not in pending state");
+        require(contracts[_contractId].partyA != _partyB, "PartyA and PartyB cannot be the same");
 
         contracts[_contractId].state = State.Approved;
         contracts[_contractId].partyB = _partyB;
@@ -125,7 +128,7 @@ contract DigitalOracles is WhitelistedRole {
     onlyWhitelisted
     public returns (uint256 _id) {
         require(_contractId != 0, "Invalid contract ID");
-        require(contracts[_contractId].state == State.Pending, "Contract not in pending state");
+        require(contracts[_contractId].state == State.Pending || contracts[_contractId].state == State.Approved, "Contract not in pending or approved state");
 
         contracts[_contractId].state = State.Terminated;
 
@@ -139,7 +142,7 @@ contract DigitalOracles is WhitelistedRole {
     onlyWhitelisted
     public returns (uint256 _id) {
         require(_contractId != 0, "Invalid contract ID");
-        require(contracts[_contractId].state == State.Pending || contracts[_contractId].state == State.Approved, "Contract not in pending state");
+        require(contracts[_contractId].state == State.Pending || contracts[_contractId].state == State.Approved, "Contract not in pending or approved state");
 
         invoices[_contractId].push(_invoiceId);
 

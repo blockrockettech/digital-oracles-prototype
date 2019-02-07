@@ -25,7 +25,7 @@ contract('DigitalOracles tests', function (accounts) {
     });
 
     context('validation', async function () {
-
+        // TODO add more tests around validation once we know more
     });
 
     context('basic contract workflow', async function () {
@@ -44,16 +44,17 @@ contract('DigitalOracles tests', function (accounts) {
             const {creationDate, partyA, state, contractData, invoiceIds} = await this.digitalOracles.getContract(CONTRACT_1);
             partyA.should.be.bignumber.eq(PARTY_A.toString());
             state.should.be.bignumber.eq(State.Pending.toString());
-            contractData.should.be.eq('0x0000000000000000000000000000000000000000000000000000000000000000');
+            contractData.should.be.eq('');
             invoiceIds.should.be.deep.eq([]);
             creationDate.should.not.be.null;
 
-            const {logs: approvalLogs} = await this.digitalOracles.approveContract(CONTRACT_1, PARTY_B, web3.utils.asciiToHex("an-ipfs-hash"));
+            const {logs: approvalLogs} = await this.digitalOracles.approveContract(CONTRACT_1, PARTY_B, "an-ipfs-hash");
+            console.log(approvalLogs);
             expectEvent.inLogs(approvalLogs,
                 `ContractApproved`,
                 {
                     contractId: new BN(CONTRACT_1),
-                    contractData: "0x616e2d697066732d686173680000000000000000000000000000000000000000" // bytes32 of IPFS hash
+                    contractData: "an-ipfs-hash"
                 }
             );
 
@@ -67,7 +68,7 @@ contract('DigitalOracles tests', function (accounts) {
             } = await this.digitalOracles.getContract(CONTRACT_1);
 
             expectedState.should.be.bignumber.eq(State.Approved.toString());
-            expectedContractData.should.be.eq('0x616e2d697066732d686173680000000000000000000000000000000000000000');
+            expectedContractData.should.be.eq('an-ipfs-hash');
             expectedInvoiceIds.should.be.deep.eq([]);
             expectPartyA.should.be.bignumber.eq(PARTY_A.toString());
             expectPartyB.should.be.bignumber.eq(PARTY_B.toString());
@@ -88,12 +89,12 @@ contract('DigitalOracles tests', function (accounts) {
             const {state} = await this.digitalOracles.getContract(CONTRACT_1);
             state.should.be.bignumber.eq(State.Pending.toString());
 
-            const {logs: approvalLogs} = await this.digitalOracles.approveContract(CONTRACT_1, PARTY_B, web3.utils.asciiToHex("an-ipfs-hash"), INVOICE_ID_1);
+            const {logs: approvalLogs} = await this.digitalOracles.approveContract(CONTRACT_1, PARTY_B, "an-ipfs-hash", INVOICE_ID_1);
             expectEvent.inLogs(approvalLogs,
                 `ContractApproved`,
                 {
                     contractId: new BN(CONTRACT_1),
-                    contractData: "0x616e2d697066732d686173680000000000000000000000000000000000000000" // bytes32 of IPFS hash
+                    contractData: "an-ipfs-hash"
                 }
             );
 
@@ -107,7 +108,7 @@ contract('DigitalOracles tests', function (accounts) {
             } = await this.digitalOracles.getContract(CONTRACT_1);
 
             expectedState.should.be.bignumber.eq(State.Approved.toString());
-            expectedContractData.should.be.eq('0x616e2d697066732d686173680000000000000000000000000000000000000000');
+            expectedContractData.should.be.eq('an-ipfs-hash');
             expectedInvoiceIds.map(i => i.toString()).should.be.deep.eq([
                 INVOICE_ID_1.toString()
             ]);
@@ -142,7 +143,7 @@ contract('DigitalOracles tests', function (accounts) {
             const {state} = await this.digitalOracles.getContract(CONTRACT_1);
             state.should.be.bignumber.eq(State.Pending.toString());
 
-            await this.digitalOracles.approveContract(CONTRACT_1, PARTY_B, web3.utils.asciiToHex("an-ipfs-hash"), INVOICE_ID_1);
+            await this.digitalOracles.approveContract(CONTRACT_1, PARTY_B, "an-ipfs-hash", INVOICE_ID_1);
             const {state: newState} = await this.digitalOracles.getContract(CONTRACT_1);
             newState.should.be.bignumber.eq(State.Approved.toString());
 

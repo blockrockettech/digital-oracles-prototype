@@ -22,7 +22,7 @@ The project contains the following:
 * Once installed:
     * `npm install` - install all dependencies
     * `npm run test` - runs all truffle tests
-    * `./run_app.sh` - starts up the API
+    * `./run_app.sh` - starts up the API **(you may need to run `firebase init` if its yours first time using firebase)**
     * `./firebase_deploy.sh` - deploys the app to live **(permission will need to be granted)**
     * `./clean_deploy_local.sh` - will deploy all contracts to your local blockchain
 
@@ -33,6 +33,11 @@ The project contains the following:
         * Copy the private key from your local `Ganache` account to `./functions/api/web3/privateKey.js`
         * ensure that the deployed contract address is correct - updating it here `./functions/api/web3/network.js` 
     * Start the API `./run_app.sh` **(permission will need to be granted in order to run the app under the same project name)**
+
+## SmartContract Design
+
+* The smart contract is a simple source of truth for when two parties agree on the state of a contractual agreement
+* The contract simply holds the state in the form of IDs, **with the assumption that IDs are numerical values**.
 
 ## API Design
 
