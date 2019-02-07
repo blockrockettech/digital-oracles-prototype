@@ -1,4 +1,6 @@
-// Check gas prices before live deploy - https://ethgasstation.info/
+const HDWalletProvider = require('truffle-hdwallet-provider');
+const mnemonic = require('./mnemonic');
+const {INFURA_KEY} = require('./functions/const');
 
 module.exports = {
   mocha: {
@@ -28,6 +30,15 @@ module.exports = {
       network_id: "*",
       gas: 6721975,
       gasPrice: 1
+    },
+    ropsten: {
+      provider: function () {
+        return new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/${INFURA_KEY}`);
+      },
+      network_id: 3,
+      gas: 7000000, // default = 4712388
+      gasPrice: 4000000000, // default = 100 gwei = 100000000000
+      skipDryRun: true
     },
   }
 };

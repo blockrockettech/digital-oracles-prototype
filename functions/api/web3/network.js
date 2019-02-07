@@ -23,16 +23,14 @@ const networkSplitter = (network, {ropsten, rinkeby, mainnet, local}) => {
     }
 };
 
-
 const getAddress = (network) => {
     return networkSplitter(network, {
         mainnet: '',
-        ropsten: '',
+        ropsten: '0x8842cf7Ef8b9685BF3D99d1174730e01b58E0250',
         rinkeby: '',
         local: '0x6510C97786EeAE98478674D038b1c9b742e62EA0'
     });
 };
-
 
 const getNetwork = (network) => {
     return networkSplitter(network, {

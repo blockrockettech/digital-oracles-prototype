@@ -9,6 +9,9 @@ class BlockchainService {
         return web3.eth.getTransaction(txsHash);
     }
 
+    /**
+     * If successful it will NOT contain a [status] of [false]`
+     */
     async getTransactionReceipt(network, txsHash) {
         const web3 = httpProvider(network);
         return web3.eth.getTransactionReceipt(txsHash);
