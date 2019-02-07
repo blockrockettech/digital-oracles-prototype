@@ -1,5 +1,4 @@
 const HDWalletProvider = require('truffle-hdwallet-provider');
-const mnemonic = require('./mnemonic');
 const {INFURA_KEY} = require('./functions/const');
 
 module.exports = {
@@ -33,7 +32,7 @@ module.exports = {
     },
     ropsten: {
       provider: function () {
-        return new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/${INFURA_KEY}`);
+        return new HDWalletProvider(require('./mnemonic'), `https://ropsten.infura.io/v3/${INFURA_KEY}`);
       },
       network_id: 3,
       gas: 7000000, // default = 4712388
