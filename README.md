@@ -17,6 +17,7 @@ The project contains the following:
     * **node JS 8+**
     * **truffle 5+** - https://truffleframework.com
     * **ganache 1.4+** - https://truffleframework.com/ganache
+    * **firebase tools** - `npm install -g firebase-tools`
     
 * Once installed:
     * `npm install` - install all dependencies
