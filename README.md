@@ -14,15 +14,15 @@ The project contains the following:
 ## Installation
 
 * Requires the following tools to run locally
-    * **node JS 8+**
+    * **Node JS 8+**
     * **truffle 5+** - https://truffleframework.com
-    * **ganache 1.4+** - https://truffleframework.com/ganache
+    * **ganache 1.3+** - https://truffleframework.com/ganache
     * **firebase tools** - `npm install -g firebase-tools`
     
 * Once installed:
     * `npm install` - install all dependencies
     * `npm run test` - runs all truffle tests
-    * `./run_app.sh` - starts up the API **(you may need to run `firebase init` if its yours first time using firebase)**
+    * `./run_app.sh` - starts up the API **(you may need to run `firebase login` if its yours first time using firebase)** - more details here https://firebase.google.com/docs/cli/
     * `./firebase_deploy.sh` - deploys the app to live **(permission will need to be granted)**
     * `./clean_deploy_local.sh` - will deploy all contracts to your local blockchain
 
@@ -41,9 +41,9 @@ The project contains the following:
 
 ## API Design
 
-* By design the API is stateless and proxies all calls to the blockchain
-* When making an API call you must follow this pattern at present:
-    * Post to API to endpoint which will change state
+* By design the API is stateless and proxies all calls to an Ethereum based blockchain
+* When making an API call you must follow this pattern:
+    * Post data to API to endpoint which will change the contract state
         * e.g. `POST /api/contracts/create` with body 
             ```json
             {
@@ -71,18 +71,20 @@ The project contains the following:
         "cumulativeGasUsed": "0x336d0",
         "from": "0x0df0cC6576Ed17ba870D6FC271E20601e3eE176e",
         "gasUsed": "0x1c497",
-        "logs": [
-            ...
-        ],
+        "logs": [],
         "logsBloom": "0x04000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000004000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000008000000000000000000000000000000000100000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000001000000000008000000000000000000000",
-        "status": "0x1",
+        "status": "0x1", <- the important bit
         "to": "0xae7FD5f460ff90fDCB86963De4c3ddDd237614aD",
         "transactionHash": "0x44cf9a40cd11a241da5f52b23602d90a6e8463e5aebf3ba6635f63af2e55bb8b",
         "transactionIndex": 3
     }
     ```
-    * When the `status` is not `false` or zero `0x0` the txs has been mined successfully and the next txs can be sent
+    * When the `status` is `false` or `0x0` (zero) the txs has **failed**
+    * When the `status` is `true` or `0x1` (one) the txs has been mined **successfully** and the next txs can be sent
     * The calling application will need to stack up txs and process them sequentially
+    * This post -> poll -> success/fail process is as the blockchain is async and there is no guarantee when or if the txs will be included in a block
+
+* The best way to see what API functions exist is to view the postman collection at the root of the project
 
 ### API Hosts
 
@@ -92,9 +94,8 @@ The project contains the following:
 ### Deployed Contracts
 * (Ropsten) https://ropsten.etherscan.io/address/0xae7fd5f460ff90fdcb86963de4c3dddd237614ad
 
-### GAS constraints
-* Each transaction will get the latest standard GAS price, if this reaches above the value in `functions/const.js` - `MAX_GAS_PRICE` the txs will fail 
-
+### GAS Limits and Constraints
+* Each transaction will get the latest standard GAS price, if this reaches above the value in `functions/const.js` - `MAX_GAS_PRICE` the txs will not be submit and an error will be returned from the service 
 
 ### Network IDs
 

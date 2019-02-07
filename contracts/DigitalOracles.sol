@@ -5,15 +5,64 @@ import "openzeppelin-solidity/contracts/access/roles/WhitelistedRole.sol";
 contract DigitalOracles is WhitelistedRole {
 
     struct Contract {
-        uint256 contractId;     // The contract ID
-        uint256 creationDate;   // When the contract was created
-        uint256 partyA;         // Party B ID
-        uint256 partyB;         // Party A ID
-        State state;            // The contract state
-        string contractData;   // The IPFS hash of the approved contract
+        uint256 contractId;          // The contract ID
+        uint256 creationDate;        // When the contract was created
+        uint256 partyA;              // Party B ID
+        uint256 partyB;              // Party A ID
+        State state;                 // The contract state
+        string contractData;         // The IPFS hash of the approved contract
+
+        // TODO handle new fields below
+
+        uint256 startDate;           // Project start date
+        uint256 endDate;             // Project start date
+
+        ContractDuration duration;  // Duration of the project (indefinitely or fixed term)
+        Remuneration remuneration;  // Will the Parties receive remuneration for work done?
+
+        PaymentTerms paymentTerms;  // When will the client be paid?
+        uint256 paymentTermsValue;  // The corresponding payment terms value e.g. a percentage, a date or a monetary value
+
+        ClientPaymentTerms clientPaymentTerms;  // The client will pay the invoice
+        uint256 clientPaymentTermsValue;        // The corresponding client payment terms value e.g. a number of dates
     }
 
-    enum State {Blank, Pending, Approved, Terminated}
+    enum Remuneration {
+        Blank, // not set
+        True, // pending awaiting details
+        False // approved, details received
+    }
+
+    enum State {
+        Blank, // not set
+        Pending, // pending awaiting details
+        Approved, // approved, details received
+        Terminated // terminated
+    }
+
+    enum ContractDuration {
+        Blank, // not set
+        Indefinite, // indefinitely until termination
+        FixedTerm // based on project start/end
+    }
+
+    enum PaymentTerms {
+        Blank, // not set
+        HourlyRate, // A set hourly rate
+        Daily, // invoiceable daily
+        Weekly, // invoiceable weekly
+        Monthly, // invoiceable monthly
+        Yearly, // invoiceable yearly
+        OnCompletion, // when work is complete
+        PercentageUpFront, // a percentage upfront, remaining on completion
+        OnDate // On a specific date
+    }
+
+    enum ClientPaymentTerms {
+        Blank, // not set
+        UponReceipt, // when receipt is received
+        WithXDays // within a certain number of days
+    }
 
     ////////////
     // Events //
@@ -52,7 +101,23 @@ contract DigitalOracles is WhitelistedRole {
         require(contracts[_contractId].state == State.Blank, "Contract already created");
 
         // Create Contract
-        contracts[_contractId] = Contract(_contractId, now, _partyA, 0, State.Pending, "");
+        contracts[_contractId] = Contract(
+            _contractId,
+            now,
+            _partyA,
+            0,
+            State.Pending,
+            "",
+            // TODO new fields below
+            0,
+            0,
+            ContractDuration.Blank,
+            Remuneration.Blank,
+            PaymentTerms.Blank,
+            0,
+            ClientPaymentTerms.Blank,
+            0
+        );
 
         emit ContractCreated(_contractId, _partyA);
 

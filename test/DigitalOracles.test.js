@@ -49,7 +49,6 @@ contract('DigitalOracles tests', function (accounts) {
             creationDate.should.not.be.null;
 
             const {logs: approvalLogs} = await this.digitalOracles.approveContract(CONTRACT_1, PARTY_B, "an-ipfs-hash");
-            console.log(approvalLogs);
             expectEvent.inLogs(approvalLogs,
                 `ContractApproved`,
                 {
