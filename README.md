@@ -1,6 +1,6 @@
 # digital-oracles-prototype
 
-#### Contents
+## Contents
 
 The project contains the following:
 
@@ -11,7 +11,7 @@ The project contains the following:
     * Note this has its own `node_modules` and `package.json` different from the root project
 * Postman API collection can be imported from `DigitalOracles.postman_collection.json` 
 
-#### Installation
+## Installation
 
 * Requires the following tools to run locally
     * **node JS 8+**
@@ -34,7 +34,7 @@ The project contains the following:
         * ensure that the deployed contract address is correct - updating it here `./functions/api/web3/network.js` 
     * Start the API `./run_app.sh` **(permission will need to be granted in order to run the app under the same project name)**
 
-#### Network ID
+### Network ID
 
 * Networks are as follows:
 
@@ -45,7 +45,44 @@ The project contains the following:
 | rinkeby  | 4 |
 | mainnet  | 1 |
 
-#### API Hosts
+## API Design
+
+* By design the API is stateless and proxies all calls to the blockchain
+* The order of an API call is as follows:
+    * Post to API to endpoint which will change state
+    * The API then submits the txs and returns a blob such as this:
+    ```json
+    {
+        "success": true,
+        "address": "0xae7FD5f460ff90fDCB86963De4c3ddDd237614aD",
+        "network": 3,
+        "transactionHash": "0x44cf9a40cd11a241da5f52b23602d90a6e8463e5aebf3ba6635f63af2e55bb8b"
+    }
+    ```
+    * The calling service will then need to poll this endpoint every 5-10 seconds `/api/chain/{the_network_being_used}/{the_transactionHash_above}/receipt`
+    * This will return a blob such as this:
+    ```json
+    {
+        "blockHash": "0xb886859dc137efb8b8b0157840aae1be5b45a85ffdf8f13c0042e87ed9c9684b",
+        "blockNumber": 4972704,
+        "contractAddress": null,
+        "cumulativeGasUsed": "0x336d0",
+        "from": "0x0df0cC6576Ed17ba870D6FC271E20601e3eE176e",
+        "gasUsed": "0x1c497",
+        "logs": [
+            ...
+        ],
+        "logsBloom": "0x04000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000004000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000008000000000000000000000000000000000100000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000001000000000008000000000000000000000",
+        "status": "0x1",
+        "to": "0xae7FD5f460ff90fDCB86963De4c3ddDd237614aD",
+        "transactionHash": "0x44cf9a40cd11a241da5f52b23602d90a6e8463e5aebf3ba6635f63af2e55bb8b",
+        "transactionIndex": 3
+    }
+    ```
+    * When the `status` is not `false` or zero `0x0` the txs has been mined successfully and the next txs can be sent
+    * The calling application will need to stack up txs and process them sequentially
+
+### API Hosts
 
 * local: http://localhost:5000/digital-oracles/us-central1
 * deployed: https://us-central1-digital-oracles.cloudfunctions.net
