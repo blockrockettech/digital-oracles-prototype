@@ -3,6 +3,7 @@ const {getAddress} = require("../web3/network");
 const {httpProvider} = require("../web3/web3Provider");
 const DigitalOraclesAbi = require('../web3/abi/digitalOracles.abi');
 const gasPriceService = require('./gasPriceApi.service');
+const GasToHighError = require('../errors/GasToHighError');
 
 const privateKey = require('../web3/privateKey');
 
@@ -110,6 +111,10 @@ class DigitalOraclesService {
 
         const gasPrice = await gasPriceService.getGasPrice();
         const gasLimit = (await web3.eth.getBlock("latest")).gasLimit;
+
+        if(gasPriceService.isOverThreshold(gasPrice)) {
+            throw new GasToHighError();
+        }
 
         const txs = {
             from: web3.eth.accounts.privateKeyToAccount(privateKey).address,
