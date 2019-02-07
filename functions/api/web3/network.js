@@ -26,9 +26,9 @@ const networkSplitter = (network, {ropsten, rinkeby, mainnet, local}) => {
 const getAddress = (network) => {
     return networkSplitter(network, {
         mainnet: '',
-        ropsten: '0x8842cf7Ef8b9685BF3D99d1174730e01b58E0250',
+        ropsten: '0xae7FD5f460ff90fDCB86963De4c3ddDd237614aD',
         rinkeby: '',
-        local: '0x6510C97786EeAE98478674D038b1c9b742e62EA0' // <- UPDATE THIS WITH YOUR LOCALLY INSTALLED GANACHE VERSION
+        local: '0x5501d4c6aBD37091B223Ea319380b0A4762C6Eb2' // <- UPDATE THIS WITH YOUR LOCALLY INSTALLED GANACHE VERSION
     });
 };
 
@@ -41,8 +41,18 @@ const getNetwork = (network) => {
     });
 };
 
+const getNetworkName = (network) => {
+    return networkSplitter(network, {
+        mainnet: 'mainnet',
+        ropsten: 'ropsten',
+        rinkeby: 'rinkeby',
+        local: 'local'
+    });
+};
+
 module.exports = {
     getAddress,
+    getNetworkName,
     getNetwork
 };
 

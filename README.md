@@ -33,3 +33,14 @@ The project contains the following:
         * Copy the private key from your local `Ganache` account to `./functions/api/web3/privateKey.js`
         * ensure that the deployed contract address is correct - updating it here `./functions/api/web3/network.js` 
     * Start the API `./run_app.sh` **(permission will need to be granted in order to run the app under the same project name)**
+
+#### Requiring a network ID
+
+* Networks are as follows:
+
+|  Network | ID  |
+|---|---|
+| local  |  5777 |
+| ropsten | 3 |
+| rinkeby  | 4 |
+| mainnet  | 1 |

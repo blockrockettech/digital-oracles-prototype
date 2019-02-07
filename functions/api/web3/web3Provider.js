@@ -1,5 +1,5 @@
 const Web3 = require('web3');
-
+const {getNetworkName} = require("./network");
 const {INFURA_KEY} = require('../../const');
 
 const httpProviderWeb3 = {};
@@ -13,7 +13,7 @@ const webSocket = (network) => {
     if (network === 5777) {
         webSocketWeb3[network] = new Web3(new Web3.providers.WebsocketProvider(`ws://localhost:7545`));
     } else {
-        webSocketWeb3[network] = new Web3(new Web3.providers.WebsocketProvider(`wss://${network}.infura.io/ws/v3/${INFURA_KEY}`));
+        webSocketWeb3[network] = new Web3(new Web3.providers.WebsocketProvider(`wss://${getNetworkName(network)}.infura.io/ws/v3/${INFURA_KEY}`));
     }
 
     return webSocketWeb3[network];
@@ -27,7 +27,7 @@ const httpProvider = (network) => {
     if (network === 5777) {
         httpProviderWeb3[network] = new Web3(new Web3.providers.HttpProvider(`http://127.0.0.1:7545`));
     } else {
-        httpProviderWeb3[network] = new Web3(new Web3.providers.HttpProvider(`https://${network}.infura.io/v3/${INFURA_KEY}`));
+        httpProviderWeb3[network] = new Web3(new Web3.providers.HttpProvider(`https://${getNetworkName(network)}.infura.io/v3/${INFURA_KEY}`));
     }
 
     return httpProviderWeb3[network];

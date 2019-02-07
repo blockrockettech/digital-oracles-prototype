@@ -11,8 +11,7 @@
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0x10154bad"
+    "type": "function"
   },
   {
     "constant": false,
@@ -26,8 +25,7 @@
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0x291d9549"
+    "type": "function"
   },
   {
     "constant": true,
@@ -46,8 +44,7 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0x3af32abf"
+    "type": "function"
   },
   {
     "constant": false,
@@ -56,8 +53,7 @@
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0x4c5a628c"
+    "type": "function"
   },
   {
     "constant": false,
@@ -71,8 +67,7 @@
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0x7362d9c8"
+    "type": "function"
   },
   {
     "constant": true,
@@ -91,8 +86,7 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0xbb5f747b"
+    "type": "function"
   },
   {
     "constant": false,
@@ -101,15 +95,13 @@
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0xd6cd9473"
+    "type": "function"
   },
   {
     "inputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "constructor",
-    "signature": "constructor"
+    "type": "constructor"
   },
   {
     "anonymous": false,
@@ -126,8 +118,7 @@
       }
     ],
     "name": "ContractCreated",
-    "type": "event",
-    "signature": "0xf9b35b99c874e29dc89fd22e00a5ee1d8c2947af038de771d92b37edc70274b2"
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -144,8 +135,7 @@
       }
     ],
     "name": "ContractPartyBAdded",
-    "type": "event",
-    "signature": "0x204d8cd5497d47b1c5bd0a781a893304305bfeb2a03627bb37ccca07a0afc8eb"
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -158,12 +148,11 @@
       {
         "indexed": true,
         "name": "contractData",
-        "type": "bytes32"
+        "type": "string"
       }
     ],
     "name": "ContractApproved",
-    "type": "event",
-    "signature": "0x4515be6e857bd693ad54fadbc2e3066f0305783d258be5f2d8ed37b875ee6d6d"
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -180,8 +169,7 @@
       }
     ],
     "name": "ContractStateChanged",
-    "type": "event",
-    "signature": "0x9457c2cd66a144975542c6fa2d94bc9e2fc20b498caaca45052ded00530d899e"
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -193,8 +181,7 @@
       }
     ],
     "name": "ContractTerminated",
-    "type": "event",
-    "signature": "0x5760684a9ae00ee4a9ccadd1b4cc0c9bc48ff36d7c91399445204ca23ec18857"
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -211,8 +198,7 @@
       }
     ],
     "name": "InvoiceAdded",
-    "type": "event",
-    "signature": "0x4ec82c3ca9651aadf9d7220ebe32718733753b49d058d5a237b32f9dee0c0633"
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -224,8 +210,7 @@
       }
     ],
     "name": "WhitelistedAdded",
-    "type": "event",
-    "signature": "0xee1504a83b6d4a361f4c1dc78ab59bfa30d6a3b6612c403e86bb01ef2984295f"
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -237,8 +222,7 @@
       }
     ],
     "name": "WhitelistedRemoved",
-    "type": "event",
-    "signature": "0x270d9b30cf5b0793bbfd54c9d5b94aeb49462b8148399000265144a8722da6b6"
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -250,8 +234,7 @@
       }
     ],
     "name": "WhitelistAdminAdded",
-    "type": "event",
-    "signature": "0x22380c05984257a1cb900161c713dd71d39e74820f1aea43bd3f1bdd20961299"
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -263,8 +246,7 @@
       }
     ],
     "name": "WhitelistAdminRemoved",
-    "type": "event",
-    "signature": "0x0a8eb35e5ca14b3d6f28e4abf2f128dbab231a58b56e89beb5d636115001e165"
+    "type": "event"
   },
   {
     "constant": false,
@@ -287,8 +269,7 @@
     ],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0xdb5271d3"
+    "type": "function"
   },
   {
     "constant": false,
@@ -311,8 +292,7 @@
     ],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0x9dfe5642"
+    "type": "function"
   },
   {
     "constant": false,
@@ -335,8 +315,7 @@
     ],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0xb58f97bb"
+    "type": "function"
   },
   {
     "constant": false,
@@ -351,7 +330,7 @@
       },
       {
         "name": "_contractData",
-        "type": "bytes32"
+        "type": "string"
       }
     ],
     "name": "approveContract",
@@ -363,8 +342,7 @@
     ],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0x251ad0a6"
+    "type": "function"
   },
   {
     "constant": false,
@@ -379,7 +357,7 @@
       },
       {
         "name": "_contractData",
-        "type": "bytes32"
+        "type": "string"
       },
       {
         "name": "_invoiceId",
@@ -395,8 +373,7 @@
     ],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0x2b4ea1c3"
+    "type": "function"
   },
   {
     "constant": false,
@@ -415,8 +392,7 @@
     ],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0x263e3d5d"
+    "type": "function"
   },
   {
     "constant": false,
@@ -439,8 +415,7 @@
     ],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0x2206a5d4"
+    "type": "function"
   },
   {
     "constant": true,
@@ -470,7 +445,7 @@
       },
       {
         "name": "contractData",
-        "type": "bytes32"
+        "type": "string"
       },
       {
         "name": "invoiceIds",
@@ -479,8 +454,7 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0x6ebc8c86"
+    "type": "function"
   },
   {
     "constant": true,
@@ -499,7 +473,6 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0xe5c945cc"
+    "type": "function"
   }
 ]
