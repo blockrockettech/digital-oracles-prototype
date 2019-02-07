@@ -1,0 +1,464 @@
+{
+	"info": {
+		"_postman_id": "6be9fc67-476e-45de-8300-5b7d1530beb9",
+		"name": "DigitalOracles",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "contracts",
+			"item": [
+				{
+					"name": "Create Contract",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"partyA\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"contracts",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Approve Contract",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"partyB\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/approve",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"contracts",
+								"approve"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Terminate Contract",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/terminate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"contracts",
+								"terminate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set Party B on Contract",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"partyB\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/update/partyB",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"contracts",
+								"update",
+								"partyB"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contract Details",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"partyB\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/5777/details/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"contracts",
+								"5777",
+								"details",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contract Invoices",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"partyB\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/5777/details/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"contracts",
+								"5777",
+								"details",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Invoice to Contract",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"invoiceId\": 2\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/invoices/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"contracts",
+								"invoices",
+								"add"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "chain",
+			"item": [
+				{
+					"name": "Get Transaction Recipt",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/5777/0x3c36907084318babd10f1172f1eaa2d923a7544801ceedad90614db1b324a4c4/receipt",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"chain",
+								"5777",
+								"0x3c36907084318babd10f1172f1eaa2d923a7544801ceedad90614db1b324a4c4",
+								"receipt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transaction",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/5777/0x3c36907084318babd10f1172f1eaa2d923a7544801ceedad90614db1b324a4c4/raw",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"chain",
+								"5777",
+								"0x3c36907084318babd10f1172f1eaa2d923a7544801ceedad90614db1b324a4c4",
+								"raw"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Latest BlockNumber",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/5777/block/latest",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"chain",
+								"5777",
+								"block",
+								"latest"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Account Balance",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/5777/account/balance",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"chain",
+								"5777",
+								"account",
+								"balance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Account Nonce",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/5777/account/nonce",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"chain",
+								"5777",
+								"account",
+								"nonce"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
