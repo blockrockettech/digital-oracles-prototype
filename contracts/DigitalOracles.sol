@@ -12,32 +12,29 @@ contract DigitalOracles is WhitelistedRole {
         State state;                 // The contract state
         string contractData;         // The IPFS hash of the approved contract
 
+        uint256 replacementContractId;
+
         // TODO handle new fields below
 
         uint256 startDate;           // Project start date
         uint256 endDate;             // Project start date
 
         ContractDuration duration;  // Duration of the project (indefinitely or fixed term)
-        Remuneration remuneration;  // Will the Parties receive remuneration for work done?
+        bool contractHasValue;      // Will the Parties receive remuneration for work done?
 
-        PaymentTerms paymentTerms;  // When will the client be paid?
-        uint256 paymentTermsValue;  // The corresponding payment terms value e.g. a percentage, a date or a monetary value
+        PaymentFrequency paymentFrequency;  // When will the client be paid?
+        uint256 paymentFrequencyValue;  // The corresponding payment terms value e.g. a percentage, a date or a monetary value
 
         ClientPaymentTerms clientPaymentTerms;  // The client will pay the invoice
         uint256 clientPaymentTermsValue;        // The corresponding client payment terms value e.g. a number of dates
-    }
-
-    enum Remuneration {
-        Blank, // not set
-        True, // pending awaiting details
-        False // approved, details received
     }
 
     enum State {
         Blank, // not set
         Pending, // pending awaiting details
         Approved, // approved, details received
-        Terminated // terminated
+        Terminated, // terminated
+        Replaced
     }
 
     enum ContractDuration {
@@ -46,7 +43,7 @@ contract DigitalOracles is WhitelistedRole {
         FixedTerm // based on project start/end
     }
 
-    enum PaymentTerms {
+    enum PaymentFrequency {
         Blank, // not set
         HourlyRate, // A set hourly rate
         Daily, // invoiceable daily
@@ -81,6 +78,10 @@ contract DigitalOracles is WhitelistedRole {
     // Contract ID -> Invoice IDs
     mapping(uint256 => uint256[]) invoices;
 
+    // TODO
+    // InvoiceId - invoice Id not across multiple contracts
+    // InvoiceStatus - Pending, Paid, Refunded, Delayed (once pending, never back to pending)
+
     /////////////////
     // Constructor //
     /////////////////
@@ -112,8 +113,8 @@ contract DigitalOracles is WhitelistedRole {
             0,
             0,
             ContractDuration.Blank,
-            Remuneration.Blank,
-            PaymentTerms.Blank,
+            ContractHasValue.Blank,
+            PaymentFrequency.Blank,
             0,
             ClientPaymentTerms.Blank,
             0
