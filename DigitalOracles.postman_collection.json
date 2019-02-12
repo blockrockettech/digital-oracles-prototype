@@ -148,7 +148,7 @@
 					"response": []
 				},
 				{
-					"name": "Update Contract EndDate Copy",
+					"name": "Update Contract ContractHasValue",
 					"request": {
 						"method": "POST",
 						"header": [

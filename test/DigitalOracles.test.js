@@ -38,6 +38,104 @@ contract.only('DigitalOracles tests', function (accounts) {
 
     context('validation', async function () {
         // TODO add more tests around validation once we know more
+
+        context('createContract', async function () {
+            it('reverts if contract ID zero', async function () {
+                await shouldFail.reverting.withMessage(
+                    this.digitalOracles.createContract(
+                        0,// error
+                        START_DATE,
+                        END_DATE,
+                        PARTY_A,
+                        PARTY_B,
+                        IPFS_HASH,
+                        ContractDuration.FixedTerm,
+                        false,
+                        PaymentFrequency.Daily,
+                        0,
+                        ClientPaymentTerms.WithXDays,
+                        30
+                    ),
+                    "Invalid contract ID"
+                );
+            });
+
+            it('reverts if partyA zero', async function () {
+                await shouldFail.reverting.withMessage(
+                    this.digitalOracles.createContract(
+                        CONTRACT_1,
+                        START_DATE,
+                        END_DATE,
+                        0,// error
+                        PARTY_B,
+                        IPFS_HASH,
+                        ContractDuration.FixedTerm,
+                        false,
+                        PaymentFrequency.Daily,
+                        0,
+                        ClientPaymentTerms.WithXDays,
+                        30
+                    ),
+                    "Invalid partyA ID"
+                );
+            });
+
+            it('reverts if partyB zero', async function () {
+                await shouldFail.reverting.withMessage(
+                    this.digitalOracles.createContract(
+                        CONTRACT_1,
+                        START_DATE,
+                        END_DATE,
+                        PARTY_A,
+                        0, // error
+                        IPFS_HASH,
+                        ContractDuration.FixedTerm,
+                        false,
+                        PaymentFrequency.Daily,
+                        0,
+                        ClientPaymentTerms.WithXDays,
+                        30
+                    ),
+                    "Invalid partyB ID"
+                );
+            });
+
+            it('reverts if contract already create', async function () {
+                await this.digitalOracles.createContract(
+                    CONTRACT_1,
+                    START_DATE,
+                    END_DATE,
+                    PARTY_A,
+                    PARTY_B,
+                    IPFS_HASH,
+                    ContractDuration.FixedTerm,
+                    false,
+                    PaymentFrequency.Daily,
+                    0,
+                    ClientPaymentTerms.WithXDays,
+                    30
+                );
+
+                await shouldFail.reverting.withMessage(
+                    this.digitalOracles.createContract(
+                        CONTRACT_1,
+                        START_DATE,
+                        END_DATE,
+                        PARTY_A,
+                        PARTY_B,
+                        IPFS_HASH,
+                        ContractDuration.FixedTerm,
+                        false,
+                        PaymentFrequency.Daily,
+                        0,
+                        ClientPaymentTerms.WithXDays,
+                        30
+                    ),
+                    "Contract already created"
+                );
+            });
+        });
+
     });
 
     context('basic contract workflow', async function () {

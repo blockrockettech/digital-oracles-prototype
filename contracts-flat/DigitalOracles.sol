@@ -206,12 +206,19 @@ contract DigitalOracles is WhitelistedRole {
     // Events //
     ////////////
 
-    // Contract events
-    event ContractCreated(uint256 indexed contractId, uint256 indexed partyA, uint256 indexed _partyB, string _contractData);
-    event ContractStateChanged(uint256 indexed contractId, State indexed originalState, State indexed state);
+    // Contract created - fired only one per contract
+    event ContractCreated(uint256 indexed contractId, uint256 indexed partyA, uint256 indexed partyB, string contractData);
+
+    // Contract state updates
     event ContractApproved(uint256 indexed contractId);
     event ContractTerminated(uint256 indexed contractId);
     event ContractReplaced(uint256 indexed contractId, uint256 indexed replacementContractId);
+
+    // Contract property update events
+    event ContractStateChanged(uint256 indexed contractId, State originalValue, State newValue);
+    event ContractStartDateChanged(uint256 indexed contractId, uint256 originalValue, uint256 newValue);
+    event ContractEndDateChanged(uint256 indexed contractId, uint256 originalValue, uint256 newValue);
+    event ContractHasValueChanged(uint256 indexed contractId, bool originalValue, bool newValue);
 
     // Invoice events
     event InvoiceAdded(uint256 indexed contractId, uint256 indexed invoiceId, InvoiceStatus indexed invoiceStatus);
@@ -290,7 +297,7 @@ contract DigitalOracles is WhitelistedRole {
     onlyWhitelisted
     public returns (uint256 _id) {
         require(_contractId != 0, "Invalid contract ID");
-        require(contracts[_contractId].state == State.Blank, "Contract not created");
+        require(contracts[_contractId].state != State.Blank, "Contract not created");
 
         State originalState = contracts[_contractId].state;
 
@@ -301,7 +308,53 @@ contract DigitalOracles is WhitelistedRole {
         return _contractId;
     }
 
-    // TODO new test
+    function updateContractStartDate(uint256 _contractId, uint256 _startDate)
+    onlyWhitelisted
+    public returns (uint256 _id) {
+        require(_contractId != 0, "Invalid contract ID");
+        require(_startDate != 0, "Start date not valid");
+        require(contracts[_contractId].state != State.Blank, "Contract not created");
+
+        uint256 originalStartDate = contracts[_contractId].startDate;
+
+        contracts[_contractId].startDate = _startDate;
+
+        emit ContractStartDateChanged(_contractId, originalStartDate, _startDate);
+
+        return _contractId;
+    }
+
+    function updateContractEndDate(uint256 _contractId, uint256 _endDate)
+    onlyWhitelisted
+    public returns (uint256 _id) {
+        require(_contractId != 0, "Invalid contract ID");
+        require(_endDate != 0, "End date not valid");
+        require(contracts[_contractId].state != State.Blank, "Contract not created");
+
+        uint256 originalEndDate = contracts[_contractId].endDate;
+
+        contracts[_contractId].endDate = _endDate;
+
+        emit ContractEndDateChanged(_contractId, originalEndDate, _endDate);
+
+        return _contractId;
+    }
+
+    function updateContractHasValue(uint256 _contractId, bool _contractHasValue)
+    onlyWhitelisted
+    public returns (uint256 _id) {
+        require(_contractId != 0, "Invalid contract ID");
+        require(contracts[_contractId].state != State.Blank, "Contract not created");
+
+        bool originalContractHasValue = contracts[_contractId].contractHasValue;
+
+        contracts[_contractId].contractHasValue = _contractHasValue;
+
+        emit ContractHasValueChanged(_contractId, originalContractHasValue, _contractHasValue);
+
+        return _contractId;
+    }
+
     function replaceContract(uint256 _contractId, uint256 _replacementContractId)
     onlyWhitelisted
     public returns (uint256 _id) {
@@ -349,12 +402,14 @@ contract DigitalOracles is WhitelistedRole {
         // Method arg validation
         require(_contractId != 0, "Invalid contract ID");
         require(_invoiceId != 0, "Invalid invoice ID");
-        require(_invoiceStatus == InvoiceStatus.Blank, "Cannot add a invoice in the state blank");
+        require(_invoiceStatus != InvoiceStatus.Blank, "Cannot add a invoice in the state blank");
 
         // Invoice mapping validation
         require(contracts[_contractId].state == State.Pending || contracts[_contractId].state == State.Approved, "Contract not in pending or approved state");
-        require(invoiceToContractId[_invoiceId] == 0, "Contract add invoice to multiple contracts");
+        require(invoiceToContractId[_invoiceId] == 0, "Cannot add invoice to multiple contracts");
         require(invoiceToInvoiceStatus[_invoiceId] == InvoiceStatus.Blank, "Cannot add a invoice as already created");
+
+        // TODO the below is GAS expensive (check for optimisations)
 
         // Update contract to invoice mapping
         invoicesIds[_contractId].push(_invoiceId);

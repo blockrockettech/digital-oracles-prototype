@@ -130,8 +130,8 @@ contract DigitalOracles is WhitelistedRole {
     onlyWhitelisted
     public returns (uint256 _id) {
         require(_contractId != 0, "Invalid contract ID");
-        require(_partyA != 0, "Invalid party ID");
-        require(_partyB != 0, "Invalid party ID");
+        require(_partyA != 0, "Invalid partyA ID");
+        require(_partyB != 0, "Invalid partyB ID");
         require(contracts[_contractId].state == State.Blank, "Contract already created");
 
         // Create Contract
