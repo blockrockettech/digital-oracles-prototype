@@ -173,8 +173,6 @@ contract DigitalOracles is WhitelistedRole {
         return _contractId;
     }
 
-    //*start date*, *end date*, *remuneration*
-
     function updateContractStartDate(uint256 _contractId, uint256 _startDate)
     onlyWhitelisted
     public returns (uint256 _id) {
@@ -275,6 +273,8 @@ contract DigitalOracles is WhitelistedRole {
         require(contracts[_contractId].state == State.Pending || contracts[_contractId].state == State.Approved, "Contract not in pending or approved state");
         require(invoiceToContractId[_invoiceId] == 0, "Contract add invoice to multiple contracts");
         require(invoiceToInvoiceStatus[_invoiceId] == InvoiceStatus.Blank, "Cannot add a invoice as already created");
+
+        // TODO the below is GAS expensive (check for optimisations)
 
         // Update contract to invoice mapping
         invoicesIds[_contractId].push(_invoiceId);

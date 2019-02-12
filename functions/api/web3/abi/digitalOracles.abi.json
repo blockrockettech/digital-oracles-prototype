@@ -11,7 +11,8 @@
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function"
+    "type": "function",
+    "signature": "0x10154bad"
   },
   {
     "constant": false,
@@ -25,7 +26,8 @@
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function"
+    "type": "function",
+    "signature": "0x291d9549"
   },
   {
     "constant": true,
@@ -44,7 +46,8 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "signature": "0x3af32abf"
   },
   {
     "constant": false,
@@ -53,7 +56,8 @@
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function"
+    "type": "function",
+    "signature": "0x4c5a628c"
   },
   {
     "constant": false,
@@ -67,7 +71,8 @@
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function"
+    "type": "function",
+    "signature": "0x7362d9c8"
   },
   {
     "constant": true,
@@ -86,7 +91,8 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "signature": "0xbb5f747b"
   },
   {
     "constant": false,
@@ -95,13 +101,15 @@
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function"
+    "type": "function",
+    "signature": "0xd6cd9473"
   },
   {
     "inputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "constructor"
+    "type": "constructor",
+    "signature": "constructor"
   },
   {
     "anonymous": false,
@@ -115,44 +123,21 @@
         "indexed": true,
         "name": "partyA",
         "type": "uint256"
-      }
-    ],
-    "name": "ContractCreated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "contractId",
-        "type": "uint256"
       },
       {
         "indexed": true,
         "name": "partyB",
         "type": "uint256"
-      }
-    ],
-    "name": "ContractPartyBAdded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "contractId",
-        "type": "uint256"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "name": "contractData",
         "type": "string"
       }
     ],
-    "name": "ContractApproved",
-    "type": "event"
+    "name": "ContractCreated",
+    "type": "event",
+    "signature": "0xc2ac6aa92d8f896141b5a8ecb40b8b5124ea7fef469ed8e85fce90a2a70aaafd"
   },
   {
     "anonymous": false,
@@ -161,15 +146,11 @@
         "indexed": true,
         "name": "contractId",
         "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "name": "state",
-        "type": "uint8"
       }
     ],
-    "name": "ContractStateChanged",
-    "type": "event"
+    "name": "ContractApproved",
+    "type": "event",
+    "signature": "0xd197ef70dfa5d30c3e023138d4396103a72967d6a6ab897fdd1eecb9427e7e4c"
   },
   {
     "anonymous": false,
@@ -181,7 +162,118 @@
       }
     ],
     "name": "ContractTerminated",
-    "type": "event"
+    "type": "event",
+    "signature": "0x5760684a9ae00ee4a9ccadd1b4cc0c9bc48ff36d7c91399445204ca23ec18857"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "contractId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "name": "replacementContractId",
+        "type": "uint256"
+      }
+    ],
+    "name": "ContractReplaced",
+    "type": "event",
+    "signature": "0xac5a4dd5bfca5fea47b1d5861065a9c55c252b3464443b299207430c2bd9bd70"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "contractId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "originalValue",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "name": "newValue",
+        "type": "uint8"
+      }
+    ],
+    "name": "ContractStateChanged",
+    "type": "event",
+    "signature": "0xc440e03d4d90d134cb8debb8402e5978e150052e37d6c52c9bcac61133121383"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "contractId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "originalValue",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "newValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "ContractStartDateChanged",
+    "type": "event",
+    "signature": "0xa96eb0b82d97162d1bf017956555e2bd3b1a28557dadc2541a3a606f3106c4ac"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "contractId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "originalValue",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "newValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "ContractEndDateChanged",
+    "type": "event",
+    "signature": "0xb06e31a918d358ca5f0a9e0a1331a235316bea41996aab23b54c0bd24c3fd29d"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "contractId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "originalValue",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "name": "newValue",
+        "type": "bool"
+      }
+    ],
+    "name": "ContractHasValueChanged",
+    "type": "event",
+    "signature": "0x70c309928445c4f3e3138ffaf444beb67b68725824195cef375ec725f603bdb1"
   },
   {
     "anonymous": false,
@@ -195,10 +287,44 @@
         "indexed": true,
         "name": "invoiceId",
         "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "name": "invoiceStatus",
+        "type": "uint8"
       }
     ],
     "name": "InvoiceAdded",
-    "type": "event"
+    "type": "event",
+    "signature": "0xf641e196cd8402aad8ef015c33100d57f636908e91058db02561590d48d253bd"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "contractId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "name": "invoiceId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "originalState",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "name": "newStatus",
+        "type": "uint8"
+      }
+    ],
+    "name": "InvoiceStateChanged",
+    "type": "event",
+    "signature": "0x40546da51610fcef64a3a9b7cdd0b269fdda56d71ce874390150b52e829b4c09"
   },
   {
     "anonymous": false,
@@ -210,7 +336,8 @@
       }
     ],
     "name": "WhitelistedAdded",
-    "type": "event"
+    "type": "event",
+    "signature": "0xee1504a83b6d4a361f4c1dc78ab59bfa30d6a3b6612c403e86bb01ef2984295f"
   },
   {
     "anonymous": false,
@@ -222,7 +349,8 @@
       }
     ],
     "name": "WhitelistedRemoved",
-    "type": "event"
+    "type": "event",
+    "signature": "0x270d9b30cf5b0793bbfd54c9d5b94aeb49462b8148399000265144a8722da6b6"
   },
   {
     "anonymous": false,
@@ -234,7 +362,8 @@
       }
     ],
     "name": "WhitelistAdminAdded",
-    "type": "event"
+    "type": "event",
+    "signature": "0x22380c05984257a1cb900161c713dd71d39e74820f1aea43bd3f1bdd20961299"
   },
   {
     "anonymous": false,
@@ -246,7 +375,8 @@
       }
     ],
     "name": "WhitelistAdminRemoved",
-    "type": "event"
+    "type": "event",
+    "signature": "0x0a8eb35e5ca14b3d6f28e4abf2f128dbab231a58b56e89beb5d636115001e165"
   },
   {
     "constant": false,
@@ -256,7 +386,47 @@
         "type": "uint256"
       },
       {
+        "name": "_startDate",
+        "type": "uint256"
+      },
+      {
+        "name": "_endDate",
+        "type": "uint256"
+      },
+      {
         "name": "_partyA",
+        "type": "uint256"
+      },
+      {
+        "name": "_partyB",
+        "type": "uint256"
+      },
+      {
+        "name": "_contractData",
+        "type": "string"
+      },
+      {
+        "name": "_duration",
+        "type": "uint8"
+      },
+      {
+        "name": "_contractHasValue",
+        "type": "bool"
+      },
+      {
+        "name": "_paymentFrequency",
+        "type": "uint8"
+      },
+      {
+        "name": "_paymentFrequencyValue",
+        "type": "uint256"
+      },
+      {
+        "name": "_clientPaymentTerms",
+        "type": "uint8"
+      },
+      {
+        "name": "_clientPaymentTermsValue",
         "type": "uint256"
       }
     ],
@@ -269,30 +439,8 @@
     ],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_contractId",
-        "type": "uint256"
-      },
-      {
-        "name": "_partyB",
-        "type": "uint256"
-      }
-    ],
-    "name": "setPartyBToContract",
-    "outputs": [
-      {
-        "name": "_id",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "type": "function",
+    "signature": "0x73b732b1"
   },
   {
     "constant": false,
@@ -306,7 +454,7 @@
         "type": "uint8"
       }
     ],
-    "name": "setContractState",
+    "name": "updateContractState",
     "outputs": [
       {
         "name": "_id",
@@ -315,7 +463,8 @@
     ],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function"
+    "type": "function",
+    "signature": "0x1187497e"
   },
   {
     "constant": false,
@@ -325,12 +474,100 @@
         "type": "uint256"
       },
       {
-        "name": "_partyB",
+        "name": "_startDate",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateContractStartDate",
+    "outputs": [
+      {
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xc9a05fa0"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_contractId",
         "type": "uint256"
       },
       {
-        "name": "_contractData",
-        "type": "string"
+        "name": "_endDate",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateContractEndDate",
+    "outputs": [
+      {
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xa20b8d14"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_contractId",
+        "type": "uint256"
+      },
+      {
+        "name": "_contractHasValue",
+        "type": "bool"
+      }
+    ],
+    "name": "updateContractHasValue",
+    "outputs": [
+      {
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x776fba7e"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_contractId",
+        "type": "uint256"
+      },
+      {
+        "name": "_replacementContractId",
+        "type": "uint256"
+      }
+    ],
+    "name": "replaceContract",
+    "outputs": [
+      {
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x40757f38"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_contractId",
+        "type": "uint256"
       }
     ],
     "name": "approveContract",
@@ -342,38 +579,8 @@
     ],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_contractId",
-        "type": "uint256"
-      },
-      {
-        "name": "_partyB",
-        "type": "uint256"
-      },
-      {
-        "name": "_contractData",
-        "type": "string"
-      },
-      {
-        "name": "_invoiceId",
-        "type": "uint256"
-      }
-    ],
-    "name": "approveContract",
-    "outputs": [
-      {
-        "name": "_id",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "type": "function",
+    "signature": "0x62c35c01"
   },
   {
     "constant": false,
@@ -392,7 +599,8 @@
     ],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function"
+    "type": "function",
+    "signature": "0x263e3d5d"
   },
   {
     "constant": false,
@@ -404,6 +612,10 @@
       {
         "name": "_invoiceId",
         "type": "uint256"
+      },
+      {
+        "name": "_invoiceStatus",
+        "type": "uint8"
       }
     ],
     "name": "addInvoiceToContract",
@@ -415,7 +627,36 @@
     ],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function"
+    "type": "function",
+    "signature": "0x33ca0e9b"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_contractId",
+        "type": "uint256"
+      },
+      {
+        "name": "_invoiceId",
+        "type": "uint256"
+      },
+      {
+        "name": "_invoiceStatus",
+        "type": "uint8"
+      }
+    ],
+    "name": "updateInvoiceState",
+    "outputs": [
+      {
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x6ff42c38"
   },
   {
     "constant": true,
@@ -425,10 +666,18 @@
         "type": "uint256"
       }
     ],
-    "name": "getContract",
+    "name": "getContractDetails",
     "outputs": [
       {
         "name": "creationDate",
+        "type": "uint256"
+      },
+      {
+        "name": "startDate",
+        "type": "uint256"
+      },
+      {
+        "name": "endDate",
         "type": "uint256"
       },
       {
@@ -444,17 +693,54 @@
         "type": "uint8"
       },
       {
-        "name": "contractData",
-        "type": "string"
+        "name": "duration",
+        "type": "uint8"
       },
       {
-        "name": "invoiceIds",
-        "type": "uint256[]"
+        "name": "contractData",
+        "type": "string"
       }
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "signature": "0x4d6d6a9c"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_contractId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getContractTerms",
+    "outputs": [
+      {
+        "name": "contractHasValue",
+        "type": "bool"
+      },
+      {
+        "name": "paymentFrequency",
+        "type": "uint8"
+      },
+      {
+        "name": "paymentFrequencyValue",
+        "type": "uint256"
+      },
+      {
+        "name": "clientPaymentTerms",
+        "type": "uint8"
+      },
+      {
+        "name": "clientPaymentTermsValue",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x8247a190"
   },
   {
     "constant": true,
@@ -473,6 +759,31 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "signature": "0xe5c945cc"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_invoiceId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getContractInvoiceDetails",
+    "outputs": [
+      {
+        "name": "invoiceStatus",
+        "type": "uint8"
+      },
+      {
+        "name": "contractId",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0xc5cb4e7a"
   }
 ]

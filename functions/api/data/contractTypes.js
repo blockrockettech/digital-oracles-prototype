@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const ContractState = {
     Blank: 0,       // not set
     Pending: 1,     // pending awaiting details
@@ -43,5 +45,12 @@ module.exports = {
     ContractDuration,
     PaymentFrequency,
     ClientPaymentTerms,
-    InvoiceStatus
+    InvoiceStatus,
+    fromEnumString(enumType, field) {
+        const convertedValue = enumType[field];
+        if (!convertedValue) {
+            throw new Error(`Expected one of [${_.keys(enumType)}]`);
+        }
+        return convertedValue;
+    }
 };

@@ -4,12 +4,26 @@ const contracts = require('express').Router();
 
 const digitalOraclesService = require('../services/digitalOralces.service');
 const {getNetwork} = require("../web3/network");
+const {
+    fromEnumString,
+    ClientPaymentTerms,
+    ContractDuration,
+    ContractState,
+    InvoiceStatus,
+    PaymentFrequency
+} = require("../data/contractTypes");
 
 contracts.post('/create', async (req, res, next) => {
     try {
-        const {contractId, partyA, network} = req.body;
+        const {network} = req.body;
 
-        const results = await digitalOraclesService.createContract(getNetwork(network), contractId, partyA);
+        // Map from friendly values to enum values
+        const payload = _.omit(req.body, ['network']);
+        payload.duration = fromEnumString(ContractDuration, payload.duration);
+        payload.paymentFrequency = fromEnumString(PaymentFrequency, payload.paymentFrequency);
+        payload.clientPaymentTerms = fromEnumString(ClientPaymentTerms, payload.clientPaymentTerms);
+
+        const results = await digitalOraclesService.createContract(getNetwork(network), payload);
 
         return res
             .status(200)

@@ -9,14 +9,42 @@ const privateKey = require('../web3/privateKey');
 
 class DigitalOraclesService {
 
-    async createContract(network, contractId, partyA) {
-        console.log(`Create contract for network [${network}]`, contractId, partyA);
+    async createContract(network, payload) {
+        console.log(`Create contract for network [${network}]`, payload);
 
         const web3 = httpProvider(network);
         const address = getAddress(network);
         const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
 
-        const data = DigitalOracles.methods.createContract(contractId, partyA).encodeABI();
+        const {
+            contractId,
+            startDate,
+            endDate,
+            partyA,
+            partyB,
+            contractData,
+            duration,
+            contractHasValue,
+            paymentFrequency,
+            paymentFrequencyValue,
+            clientPaymentTerms,
+            clientPaymentTermsValue
+        } = payload;
+
+        const data = DigitalOracles.methods.createContract(
+            contractId,
+            startDate,
+            endDate,
+            partyA,
+            partyB,
+            contractData,
+            duration,
+            contractHasValue,
+            paymentFrequency,
+            paymentFrequencyValue,
+            clientPaymentTerms,
+            clientPaymentTermsValue
+        ).encodeABI();
 
         return this.sendTxs(web3, data, address, network);
     }

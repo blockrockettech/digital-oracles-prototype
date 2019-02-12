@@ -26,9 +26,9 @@ const networkSplitter = (network, {ropsten, rinkeby, mainnet, local}) => {
 const getAddress = (network) => {
     return networkSplitter(network, {
         mainnet: '',
-        ropsten: '0xae7FD5f460ff90fDCB86963De4c3ddDd237614aD',
+        ropsten: '',
         rinkeby: '',
-        local: '0x5501d4c6aBD37091B223Ea319380b0A4762C6Eb2' // <- UPDATE THIS WITH YOUR LOCALLY INSTALLED GANACHE VERSION
+        local: '0x194bAfbf8eb2096e63C5d9296363d6DAcdb32527' // <- UPDATE THIS WITH YOUR LOCALLY INSTALLED GANACHE VERSION
     });
 };
 
