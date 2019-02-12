@@ -22,6 +22,7 @@ The project contains the following:
 * Once installed:
     * `npm install` - install all dependencies
     * `npm run test` - runs all truffle tests
+    * `npm run coverage` - runs code coverage over the smart contracts
     * `./run_app.sh` - starts up the API **(you may need to run `firebase login` if its yours first time using firebase)** - more details here https://firebase.google.com/docs/cli/
     * `./firebase_deploy.sh` - deploys the app to live **(permission will need to be granted)**
     * `./clean_deploy_local.sh` - will deploy all contracts to your local blockchain

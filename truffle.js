@@ -3,7 +3,12 @@ const {INFURA_KEY} = require('./functions/const');
 
 module.exports = {
   mocha: {
-    useColors: true
+    useColors: true,
+    reporter: 'eth-gas-reporter',
+    reporterOptions : {
+      currency: 'USD',
+      gasPrice: 10
+    }
   },
   compilers: {
     solc: {
@@ -29,6 +34,13 @@ module.exports = {
       network_id: "*",
       gas: 6721975,
       gasPrice: 1
+    },
+    coverage: {
+      host: "localhost",
+      network_id: "*",
+      port: 8555,         // <-- If you change this, also set the port option in .solcover.js.
+      gas: 0xfffffffffff, // <-- Use this high gas value
+      gasPrice: 0x01      // <-- Use this low gas price
     },
     ropsten: {
       provider: function () {

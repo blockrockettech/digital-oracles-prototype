@@ -7,3 +7,5 @@
 /functions/node_modules/
 /functions/api/web3/privateKey.js
 *.log
+/coverageEnv/
+/coverage/

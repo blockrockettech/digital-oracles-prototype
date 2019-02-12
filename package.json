@@ -8,6 +8,7 @@
   "scripts": {
     "run-api": "node api/index.js",
     "test": "truffle test --network ganache",
+    "coverage": "./node_modules/.bin/solidity-coverage",
     "postinstall": "cd functions; npm install; cd .."
   },
   "repository": {
@@ -30,5 +31,8 @@
     "truffle-flattener": "^1.2.12",
     "truffle-hdwallet-provider": "^1.0.3",
     "web3": "^1.0.0-beta.37"
+  },
+  "devDependencies": {
+    "solidity-coverage": "^0.5.11"
   }
 }
