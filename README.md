@@ -43,6 +43,13 @@ The project contains the following:
 ## API Design
 
 * By design the API is stateless and proxies all calls to an Ethereum based blockchain
+
+* All calls required the the `network` you are running against to be specified e.g.
+    * `5777` = local
+    * `3` = ropsten
+    * For all `GET` requests this is part of the URL `/network/{networkId}`
+    * For all `POST` requests this must be specified as part of the body payload as the property `network`
+
 * When making an API call you must follow this pattern:
     * Post data to API to endpoint which will change the contract state
         * e.g. `POST /api/contracts/create` with body 
@@ -89,8 +96,8 @@ The project contains the following:
 
 ### API Hosts
 
-* local: http://localhost:5000/digital-oracles/us-central1
-* deployed: https://us-central1-digital-oracles.cloudfunctions.net
+* local: [http://localhost:5000/digital-oracles/us-central1](http://localhost:5000/digital-oracles/us-central1)
+* deployed: [https://us-central1-digital-oracles.cloudfunctions.net](https://us-central1-digital-oracles.cloudfunctions.net)
 
 ### Deployed Contracts
 * (Ropsten) https://ropsten.etherscan.io/address/0xae7fd5f460ff90fdcb86963de4c3dddd237614ad
@@ -108,3 +115,89 @@ The project contains the following:
 | ropsten | 3 |
 | rinkeby  | 4 |
 | mainnet  | 1 |
+
+### Sample Request
+
+##### Creating a new contract
+
+`POST https://us-central1-digital-oracles.cloudfunctions.net/api/contracts/create`
+
+* `BODY`
+
+```json
+{
+    "network": 3,
+    "contractId": 1,
+    "startDate": 0,
+    "endDate": 0,
+    "partyA": 1,
+    "partyB": 1,
+    "contractData": "ipfs-1234-abc-hash",
+    "duration": "FixedTerm",
+    "contractHasValue": false,
+    "paymentFrequency": "Daily",
+    "paymentFrequencyValue": 0,
+    "clientPaymentTerms": "UponReceipt",
+    "clientPaymentTermsValue": 0
+}
+```
+
+* `RETURNS`
+
+```json
+{
+    "success": true,
+    "address": "0xCBE2D5529C7ebe642292507521a79b44d014e3cb",
+    "network": 3,
+    "transactionHash": "0xce08f00cec646edf7e602a415090493e712b11d6b9a0a15dccf81fe06cd469a6"
+}
+```
+
+##### Check the status
+
+* `GET /api/chain/3/0xce08f00cec646edf7e602a415090493e712b11d6b9a0a15dccf81fe06cd469a6/receipt`
+     * See: `/chain/{networkId}/{transactionHash}`
+* `RESPONSE`
+```json
+{
+    "blockHash": "0xf02600068be4fe9f3e2f79c3f38d404f0ca22046dc42e74cd8929ed94db10ff4",
+    "blockNumber": 5005749,
+    "contractAddress": null,
+    "cumulativeGasUsed": "0xe2eeb",
+    "from": "0x0df0cC6576Ed17ba870D6FC271E20601e3eE176e",
+    "gasUsed": "0x3777b",
+    "logs": [
+        ...
+    ],
+    "logsBloom": "0x00002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000020040000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000040000000000000000000000000000000000000000000000000000800000000000000",
+    "status": "0x1", // SEE STATUS OF 1 so it was succesful
+    "to": "0xCBE2D5529C7ebe642292507521a79b44d014e3cb",
+    "transactionHash": "0xce08f00cec646edf7e602a415090493e712b11d6b9a0a15dccf81fe06cd469a6",
+    "transactionIndex": 2
+}
+```
+
+##### Query Contract Details
+
+* `GET /api/contracts/3/details/1`
+    * See: `/contracts/{networkId}/details/{contractId}`
+* `RESPONSE`
+```json
+{
+    "creationDate": "1549989978",
+    "startDate": "0",
+    "endDate": "0",
+    "partyA": "1",
+    "partyB": "1",
+    "state": "Pending",
+    "duration": "FixedTerm",
+    "contractData": "ipfs-1234-abc-hash",
+    "contractHasValue": false,
+    "paymentFrequency": "Daily",
+    "paymentFrequencyValue": "0",
+    "clientPaymentTerms": "UponReceipt",
+    "clientPaymentTermsValue": "0",
+    "invoiceIds": [],
+    "invoices": {}
+}
+```
