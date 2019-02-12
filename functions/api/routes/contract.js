@@ -19,20 +19,6 @@ contracts.post('/create', async (req, res, next) => {
     }
 });
 
-contracts.post('/update/partyB', async (req, res, next) => {
-    try {
-        const {contractId, network, partyB} = req.body;
-
-        const results = await digitalOraclesService.setPartyBToContract(getNetwork(network), contractId, partyB);
-
-        return res
-            .status(200)
-            .json(results);
-    } catch (e) {
-        next(e);
-    }
-});
-
 contracts.post('/approve', async (req, res, next) => {
     try {
         const {contractId, partyB, contractData, network} = req.body;
@@ -55,6 +41,21 @@ contracts.post('/terminate', async (req, res, next) => {
         const {contractId, network} = req.body;
 
         const results = await digitalOraclesService.terminateContract(getNetwork(network), contractId);
+
+        return res
+            .status(200)
+            .json(results);
+    } catch (e) {
+        next(e);
+    }
+});
+
+
+contracts.post('/replace', async (req, res, next) => {
+    try {
+        const {originalContractId, replacementContractId, network} = req.body;
+
+        const results = await digitalOraclesService.replaceContract(getNetwork(network), originalContractId, replacementContractId);
 
         return res
             .status(200)
@@ -91,7 +92,6 @@ contracts.post('/invoices/add', async (req, res, next) => {
         next(e);
     }
 });
-
 
 contracts.get('/:network/invoices/:contractId/', async (req, res, next) => {
     try {

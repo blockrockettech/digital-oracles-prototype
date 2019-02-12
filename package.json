@@ -24,6 +24,7 @@
     "eth-gas-reporter": "^0.1.12",
     "express": "^4.16.4",
     "lodash": "^4.17.11",
+    "moment": "^2.24.0",
     "openzeppelin-solidity": "^2.1.2",
     "openzeppelin-test-helpers": "^0.1.1",
     "truffle-flattener": "^1.2.12",

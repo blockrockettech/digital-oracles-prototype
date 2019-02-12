@@ -21,18 +21,6 @@ class DigitalOraclesService {
         return this.sendTxs(web3, data, address, network);
     }
 
-    async setPartyBToContract(network, contractId, partyB) {
-        console.log(`Set party B for network [${network}]`, contractId, partyB);
-
-        const web3 = httpProvider(network);
-        const address = getAddress(network);
-        const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
-
-        const data = DigitalOracles.methods.setPartyBToContract(contractId, partyB).encodeABI();
-
-        return this.sendTxs(web3, data, address, network);
-    }
-
     async approveContract(network, contractId, partyB, contractData, invoiceId) {
         console.log(`Approve contract for network [${network}]`, contractId, partyB, contractData, invoiceId);
 
@@ -59,6 +47,18 @@ class DigitalOraclesService {
         const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
 
         const data = DigitalOracles.methods.terminateContract(contractId).encodeABI();
+
+        return this.sendTxs(web3, data, address, network);
+    }
+
+    async replaceContract(network, originalContractId, replacementContractId) {
+        console.log(`Replacing contract [${originalContractId}] with new contract [${replacementContractId}] for network [${network}]`);
+
+        const web3 = httpProvider(network);
+        const address = getAddress(network);
+        const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
+
+        const data = DigitalOracles.methods.replaceContract(originalContractId, replacementContractId).encodeABI();
 
         return this.sendTxs(web3, data, address, network);
     }

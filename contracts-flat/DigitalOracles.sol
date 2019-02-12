@@ -140,32 +140,94 @@ contract WhitelistedRole is WhitelistAdminRole {
 contract DigitalOracles is WhitelistedRole {
 
     struct Contract {
-        uint256 contractId;     // The contract ID
-        uint256 creationDate;   // When the contract was created
-        uint256 partyA;         // Party B ID
-        uint256 partyB;         // Party A ID
-        State state;            // The contract state
-        string contractData;   // The IPFS hash of the approved contract
+        uint256 contractId;          // The contract ID
+        uint256 creationDate;        // When the contract was created
+        uint256 partyA;              // Party B ID
+        uint256 partyB;              // Party A ID
+        string contractData;         // The IPFS hash of the approved contract
+        State state;                 // The contract state
+
+        uint256 replacementContractId; // This ID will be set when the contract moves into the state
+
+        uint256 startDate;           // Project start date
+        uint256 endDate;             // Project end date
+
+        ContractDuration duration;  // Duration of the project (indefinitely or fixed term)
+        bool contractHasValue;      // Will the Parties receive remuneration for work done?
+
+        PaymentFrequency paymentFrequency;  // When will the client be paid?
+        uint256 paymentFrequencyValue;      // The corresponding payment terms value e.g. a percentage, a date or a monetary value
+
+        ClientPaymentTerms clientPaymentTerms;  // The client will pay the invoice
+        uint256 clientPaymentTermsValue;        // The corresponding client payment terms value e.g. a number of dates
     }
 
-    enum State {Blank, Pending, Approved, Terminated}
+    enum State {
+        Blank, // not set
+        Pending, // pending awaiting details
+        Approved, // approved, details received
+        Terminated, // terminated the contract
+        Replaced    // replaced by new contract
+    }
+
+    enum ContractDuration {
+        Blank, // not set
+        Indefinite, // indefinitely until termination
+        FixedTerm // based on project start/end
+    }
+
+    enum PaymentFrequency {
+        Blank, // not set
+        HourlyRate, // A set hourly rate
+        Daily, // invoiceable daily
+        Weekly, // invoiceable weekly
+        Monthly, // invoiceable monthly
+        Yearly, // invoiceable yearly
+        OnCompletion, // when work is complete
+        PercentageUpFront, // a percentage upfront, remaining on completion
+        OnDate // On a specific date
+    }
+
+    enum ClientPaymentTerms {
+        Blank, // not set
+        UponReceipt, // when receipt is received
+        WithXDays // within a certain number of days
+    }
+
+    enum InvoiceStatus {
+        Blank,
+        Pending,
+        Paid,
+        Refunded,
+        Delayed
+    }
 
     ////////////
     // Events //
     ////////////
 
-    event ContractCreated(uint256 indexed contractId, uint256 indexed partyA);
-    event ContractPartyBAdded(uint256 indexed contractId, uint256 indexed partyB);
-    event ContractApproved(uint256 indexed contractId, string indexed contractData);
-    event ContractStateChanged(uint256 indexed contractId, State indexed state);
+    // Contract events
+    event ContractCreated(uint256 indexed contractId, uint256 indexed partyA, uint256 indexed _partyB, string _contractData);
+    event ContractStateChanged(uint256 indexed contractId, State indexed originalState, State indexed state);
+    event ContractApproved(uint256 indexed contractId);
     event ContractTerminated(uint256 indexed contractId);
-    event InvoiceAdded(uint256 indexed contractId, uint256 indexed invoiceId);
+    event ContractReplaced(uint256 indexed contractId, uint256 indexed replacementContractId);
+
+    // Invoice events
+    event InvoiceAdded(uint256 indexed contractId, uint256 indexed invoiceId, InvoiceStatus indexed invoiceStatus);
+    event InvoiceStateChanged(uint256 indexed contractId, uint256 indexed invoiceId, InvoiceStatus originalState, InvoiceStatus newStatus);
 
     // Contract ID -> Contract
     mapping(uint256 => Contract) contracts;
 
     // Contract ID -> Invoice IDs
-    mapping(uint256 => uint256[]) invoices;
+    mapping(uint256 => uint256[]) invoicesIds;
+
+    // Invoice ID -> Invoice
+    mapping(uint256 => InvoiceStatus) invoiceToInvoiceStatus; // once in state Pending, dont allow to move back to this state
+
+    // Invoice ID => Contract ID
+    mapping(uint256 => uint256) invoiceToContractId; // reverse lookups and checking if invoice is attached to another contract
 
     /////////////////
     // Constructor //
@@ -179,79 +241,91 @@ contract DigitalOracles is WhitelistedRole {
     // Contract Setup //
     /////////////////////
 
-    function createContract(uint256 _contractId, uint256 _partyA)
+    function createContract(
+        uint256 _contractId,
+        uint256 _startDate,
+        uint256 _endDate,
+        uint256 _partyA,
+        uint256 _partyB,
+        string memory _contractData,
+        ContractDuration _duration,
+        bool _contractHasValue,
+        PaymentFrequency _paymentFrequency,
+        uint256 _paymentFrequencyValue,
+        ClientPaymentTerms _clientPaymentTerms,
+        uint256 _clientPaymentTermsValue
+    )
     onlyWhitelisted
     public returns (uint256 _id) {
         require(_contractId != 0, "Invalid contract ID");
         require(_partyA != 0, "Invalid party ID");
+        require(_partyB != 0, "Invalid party ID");
         require(contracts[_contractId].state == State.Blank, "Contract already created");
 
         // Create Contract
-        contracts[_contractId] = Contract(_contractId, now, _partyA, 0, State.Pending, "");
+        contracts[_contractId] = Contract(
+            _contractId,
+            now, // creation date
+            _partyA,
+            _partyB,
+            _contractData,
+            State.Pending,
+            0, // set replacement ID to blank on creation
+            _startDate,
+            _endDate,
+            _duration,
+            _contractHasValue,
+            _paymentFrequency,
+            _paymentFrequencyValue,
+            _clientPaymentTerms,
+            _clientPaymentTermsValue
+        );
 
-        emit ContractCreated(_contractId, _partyA);
+        emit ContractCreated(_contractId, _partyA, _partyB, _contractData);
 
         return _contractId;
     }
 
-    function setPartyBToContract(uint256 _contractId, uint256 _partyB)
-    onlyWhitelisted
-    public returns (uint256 _id) {
-        require(_contractId != 0, "Invalid contract ID");
-        require(_partyB != 0, "Invalid party ID");
-        require(contracts[_contractId].state == State.Pending, "Contract not in pending state");
-
-        // Update state
-        contracts[_contractId].partyB = _partyB;
-
-        emit ContractPartyBAdded(_contractId, _partyB);
-
-        return _contractId;
-    }
-
-    function setContractState(uint256 _contractId, State _state)
+    function updateContractState(uint256 _contractId, State _state)
     onlyWhitelisted
     public returns (uint256 _id) {
         require(_contractId != 0, "Invalid contract ID");
         require(contracts[_contractId].state == State.Blank, "Contract not created");
 
+        State originalState = contracts[_contractId].state;
+
         contracts[_contractId].state = _state;
 
-        emit ContractStateChanged(_contractId, _state);
+        emit ContractStateChanged(_contractId, originalState, _state);
 
         return _contractId;
     }
 
-    function approveContract(uint256 _contractId, uint256 _partyB, string memory _contractData)
+    // TODO new test
+    function replaceContract(uint256 _contractId, uint256 _replacementContractId)
     onlyWhitelisted
     public returns (uint256 _id) {
         require(_contractId != 0, "Invalid contract ID");
-        require(_partyB != 0, "Invalid partyB ID");
-        require(contracts[_contractId].state == State.Pending, "Contract not in pending state");
+        require(contracts[_contractId].state != State.Terminated, "Contract is already terminated");
+        require(contracts[_replacementContractId].state != State.Blank, "Replacement contract not created");
 
-        contracts[_contractId].state = State.Approved;
-        contracts[_contractId].partyB = _partyB;
-        contracts[_contractId].contractData = _contractData;
+        contracts[_contractId].state = State.Replaced;
+        contracts[_contractId].replacementContractId = _replacementContractId;
 
-        emit ContractApproved(_contractId, _contractData);
+        emit ContractReplaced(_contractId, _replacementContractId);
 
         return _contractId;
     }
 
-    function approveContract(uint256 _contractId, uint256 _partyB, string memory _contractData, uint256 _invoiceId)
+    function approveContract(uint256 _contractId)
     onlyWhitelisted
     public returns (uint256 _id) {
         require(_contractId != 0, "Invalid contract ID");
-        require(_partyB != 0, "Invalid partyB ID");
         require(contracts[_contractId].state == State.Pending, "Contract not in pending state");
 
         contracts[_contractId].state = State.Approved;
-        contracts[_contractId].partyB = _partyB;
-        contracts[_contractId].contractData = _contractData;
 
-        invoices[_contractId].push(_invoiceId);
-
-        emit ContractApproved(_contractId, _contractData);
+        emit ContractApproved(_contractId);
 
         return _contractId;
     }
@@ -260,7 +334,7 @@ contract DigitalOracles is WhitelistedRole {
     onlyWhitelisted
     public returns (uint256 _id) {
         require(_contractId != 0, "Invalid contract ID");
-        require(contracts[_contractId].state == State.Pending, "Contract not in pending state");
+        require(contracts[_contractId].state == State.Pending || contracts[_contractId].state == State.Approved, "Contract not in pending or approved state");
 
         contracts[_contractId].state = State.Terminated;
 
@@ -269,42 +343,121 @@ contract DigitalOracles is WhitelistedRole {
         return _contractId;
     }
 
-
-    function addInvoiceToContract(uint256 _contractId, uint256 _invoiceId)
+    function addInvoiceToContract(uint256 _contractId, uint256 _invoiceId, InvoiceStatus _invoiceStatus)
     onlyWhitelisted
     public returns (uint256 _id) {
+        // Method arg validation
         require(_contractId != 0, "Invalid contract ID");
-        require(contracts[_contractId].state == State.Pending || contracts[_contractId].state == State.Approved, "Contract not in pending state");
+        require(_invoiceId != 0, "Invalid invoice ID");
+        require(_invoiceStatus == InvoiceStatus.Blank, "Cannot add a invoice in the state blank");
 
-        invoices[_contractId].push(_invoiceId);
+        // Invoice mapping validation
+        require(contracts[_contractId].state == State.Pending || contracts[_contractId].state == State.Approved, "Contract not in pending or approved state");
+        require(invoiceToContractId[_invoiceId] == 0, "Contract add invoice to multiple contracts");
+        require(invoiceToInvoiceStatus[_invoiceId] == InvoiceStatus.Blank, "Cannot add a invoice as already created");
 
-        emit InvoiceAdded(_contractId, _invoiceId);
+        // Update contract to invoice mapping
+        invoicesIds[_contractId].push(_invoiceId);
 
-        return _contractId;
+        // Update invoice to contract mapping
+        invoiceToContractId[_invoiceId] = _contractId;
+
+        // Update invoice state
+        invoiceToInvoiceStatus[_invoiceId] = _invoiceStatus;
+
+        emit InvoiceAdded(_contractId, _invoiceId, _invoiceStatus);
+
+        return _invoiceId;
+    }
+
+    function updateInvoiceState(uint256 _contractId, uint256 _invoiceId, InvoiceStatus _invoiceStatus)
+    onlyWhitelisted
+    public returns (uint256 _id) {
+        // Method arg validation
+        require(_contractId != 0, "Invalid contract ID");
+        require(_invoiceId != 0, "Invalid invoice ID");
+        require(_invoiceStatus != InvoiceStatus.Blank, "Cannot add a invoice in the state blank");
+        require(_invoiceStatus != InvoiceStatus.Pending, "Cannot move back to pending");
+
+        // Invoice mapping validation
+        require(contracts[_contractId].state == State.Pending || contracts[_contractId].state == State.Approved, "Contract not in pending or approved state");
+        require(invoiceToContractId[_invoiceId] == _contractId, "Contract not associated to invoice");
+        require(invoiceToInvoiceStatus[_invoiceId] != InvoiceStatus.Blank, "Invoice not created yet");
+
+        InvoiceStatus originalStatus = invoiceToInvoiceStatus[_invoiceId];
+
+        // Update invoice state
+        invoiceToInvoiceStatus[_invoiceId] = _invoiceStatus;
+
+        emit InvoiceStateChanged(_contractId, _invoiceId, originalStatus, _invoiceStatus);
+
+        return _invoiceId;
     }
 
     ///////////////////
     // Query Methods //
     ///////////////////
 
-    function getContract(uint256 _contractId)
+    function getContractDetails(uint256 _contractId)
     external view
-    returns (uint256 creationDate, uint256 partyA, uint256 partyB, State state, string memory contractData, uint256[] memory invoiceIds) {
+    returns (
+        uint256 creationDate,
+        uint256 startDate,
+        uint256 endDate,
+        uint256 partyA,
+        uint256 partyB,
+        State state,
+        ContractDuration duration,
+        string memory contractData
+    ) {
         Contract memory _contract = contracts[_contractId];
         return (
         _contract.creationDate,
+        _contract.startDate,
+        _contract.endDate,
         _contract.partyA,
         _contract.partyB,
         _contract.state,
-        _contract.contractData,
-        invoices[_contractId]
+        _contract.duration,
+        _contract.contractData
+        );
+    }
+
+    function getContractTerms(uint256 _contractId)
+    external view
+    returns (
+        bool contractHasValue,
+        PaymentFrequency paymentFrequency,
+        uint256 paymentFrequencyValue,
+        ClientPaymentTerms clientPaymentTerms,
+        uint256 clientPaymentTermsValue
+    ) {
+        Contract memory _contract = contracts[_contractId];
+        return (
+        _contract.contractHasValue,
+        _contract.paymentFrequency,
+        _contract.paymentFrequencyValue,
+        _contract.clientPaymentTerms,
+        _contract.clientPaymentTermsValue
         );
     }
 
     function getContractInvoices(uint256 _contractId)
     external view
     returns (uint256[] memory invoiceIds) {
-        return invoices[_contractId];
+        return invoicesIds[_contractId];
+    }
+
+    function getContractInvoiceDetails(uint256 _invoiceId)
+    external view
+    returns (
+        InvoiceStatus invoiceStatus,
+        uint256 contractId
+    ) {
+        return (
+        invoiceToInvoiceStatus[_invoiceId],
+        invoiceToContractId[_invoiceId]
+        );
     }
 
 }
