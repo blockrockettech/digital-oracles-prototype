@@ -49,20 +49,58 @@ class DigitalOraclesService {
         return this.sendTxs(web3, data, address, network);
     }
 
-    async approveContract(network, contractId, partyB, contractData, invoiceId) {
-        console.log(`Approve contract for network [${network}]`, contractId, partyB, contractData, invoiceId);
+    async updateContractState(network, contractId, state) {
+        console.log(`Updating contract state to [${state}] for network [${network}]`, contractId);
+        const web3 = httpProvider(network);
+        const address = getAddress(network);
+        const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
+
+        const data = DigitalOracles.methods.updateContractState(contractId, state).encodeABI();
+
+        return this.sendTxs(web3, data, address, network);
+    }
+
+    async updateContractStartDate(network, contractId, startDate) {
+        console.log(`Updating contract start date to [${startDate}] for network [${network}]`, contractId);
+        const web3 = httpProvider(network);
+        const address = getAddress(network);
+        const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
+
+        const data = DigitalOracles.methods.updateContractStartDate(contractId, startDate).encodeABI();
+
+        return this.sendTxs(web3, data, address, network);
+    }
+
+    async updateContractEndDate(network, contractId, endDate) {
+        console.log(`Updating contract end date to [${endDate}] for network [${network}]`, contractId);
+        const web3 = httpProvider(network);
+        const address = getAddress(network);
+        const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
+
+        const data = DigitalOracles.methods.updateContractEndDate(contractId, endDate).encodeABI();
+
+        return this.sendTxs(web3, data, address, network);
+    }
+
+    async updateContractHasValue(network, contractId, contractHasValue) {
+        console.log(`Updating contract has value to [${contractHasValue}] for network [${network}]`, contractId);
+        const web3 = httpProvider(network);
+        const address = getAddress(network);
+        const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
+
+        const data = DigitalOracles.methods.updateContractHasValue(contractId, contractHasValue).encodeABI();
+
+        return this.sendTxs(web3, data, address, network);
+    }
+
+    async approveContract(network, contractId) {
+        console.log(`Approve contract for network [${network}]`, contractId);
 
         const web3 = httpProvider(network);
         const address = getAddress(network);
         const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
 
-        let data = null;
-        if (!_.isUndefined(invoiceId)) {
-            console.log("Approving with invoice ID", invoiceId);
-            data = DigitalOracles.methods['approveContract(uint256,uint256,string,uint256)'](contractId, partyB, contractData, invoiceId).encodeABI();
-        } else if (contractData) {
-            data = DigitalOracles.methods['approveContract(uint256,uint256,string)'](contractId, partyB, contractData).encodeABI();
-        }
+        const data = DigitalOracles.methods.approveContract(contractId).encodeABI();
 
         return this.sendTxs(web3, data, address, network);
     }

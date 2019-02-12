@@ -33,14 +33,74 @@ contracts.post('/create', async (req, res, next) => {
     }
 });
 
+contracts.post('/update/state', async (req, res, next) => {
+    try {
+        const {network, contractId, state} = req.body;
+
+        const results = await digitalOraclesService.updateContractState(
+            getNetwork(network), contractId, fromEnumString(ContractState, state)
+        );
+
+        return res
+            .status(200)
+            .json(results);
+    } catch (e) {
+        next(e);
+    }
+});
+
+contracts.post('/update/startDate', async (req, res, next) => {
+    try {
+        const {network, contractId, startDate} = req.body;
+
+        const results = await digitalOraclesService.updateContractStartDate(
+            getNetwork(network), contractId, startDate
+        );
+
+        return res
+            .status(200)
+            .json(results);
+    } catch (e) {
+        next(e);
+    }
+});
+
+contracts.post('/update/endDate', async (req, res, next) => {
+    try {
+        const {network, contractId, endDate} = req.body;
+
+        const results = await digitalOraclesService.updateContractEndDate(
+            getNetwork(network), contractId, endDate
+        );
+
+        return res
+            .status(200)
+            .json(results);
+    } catch (e) {
+        next(e);
+    }
+});
+contracts.post('/update/contractHasValue', async (req, res, next) => {
+    try {
+        const {network, contractId, contractHasValue} = req.body;
+
+        const results = await digitalOraclesService.updateContractHasValue(
+            getNetwork(network), contractId, contractHasValue
+        );
+
+        return res
+            .status(200)
+            .json(results);
+    } catch (e) {
+        next(e);
+    }
+});
+
 contracts.post('/approve', async (req, res, next) => {
     try {
-        const {contractId, partyB, contractData, network} = req.body;
+        const {contractId, network} = req.body;
 
-        // optional so we cant explode
-        const invoiceId = req.body.invoiceId;
-
-        const results = await digitalOraclesService.approveContract(getNetwork(network), contractId, partyB, contractData, invoiceId);
+        const results = await digitalOraclesService.approveContract(getNetwork(network), contractId);
 
         return res
             .status(200)
