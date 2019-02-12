@@ -9,7 +9,6 @@ const {
     ClientPaymentTerms,
     ContractDuration,
     ContractState,
-    InvoiceStatus,
     PaymentFrequency
 } = require("../data/contractTypes");
 
@@ -28,8 +27,8 @@ contracts.post('/create', async (req, res, next) => {
         return res
             .status(200)
             .json(results);
-    } catch (e) {
-        next(e);
+    } catch (error) {
+        next(error);
     }
 });
 
@@ -44,8 +43,8 @@ contracts.post('/update/state', async (req, res, next) => {
         return res
             .status(200)
             .json(results);
-    } catch (e) {
-        next(e);
+    } catch (error) {
+        next(error);
     }
 });
 
@@ -60,8 +59,8 @@ contracts.post('/update/startDate', async (req, res, next) => {
         return res
             .status(200)
             .json(results);
-    } catch (e) {
-        next(e);
+    } catch (error) {
+        next(error);
     }
 });
 
@@ -76,10 +75,11 @@ contracts.post('/update/endDate', async (req, res, next) => {
         return res
             .status(200)
             .json(results);
-    } catch (e) {
-        next(e);
+    } catch (error) {
+        next(error);
     }
 });
+
 contracts.post('/update/contractHasValue', async (req, res, next) => {
     try {
         const {network, contractId, contractHasValue} = req.body;
@@ -91,8 +91,8 @@ contracts.post('/update/contractHasValue', async (req, res, next) => {
         return res
             .status(200)
             .json(results);
-    } catch (e) {
-        next(e);
+    } catch (error) {
+        next(error);
     }
 });
 
@@ -105,8 +105,8 @@ contracts.post('/approve', async (req, res, next) => {
         return res
             .status(200)
             .json(results);
-    } catch (e) {
-        next(e);
+    } catch (error) {
+        next(error);
     }
 });
 
@@ -119,11 +119,10 @@ contracts.post('/terminate', async (req, res, next) => {
         return res
             .status(200)
             .json(results);
-    } catch (e) {
-        next(e);
+    } catch (error) {
+        next(error);
     }
 });
-
 
 contracts.post('/replace', async (req, res, next) => {
     try {
@@ -134,8 +133,8 @@ contracts.post('/replace', async (req, res, next) => {
         return res
             .status(200)
             .json(results);
-    } catch (e) {
-        next(e);
+    } catch (error) {
+        next(error);
     }
 });
 
@@ -143,27 +142,27 @@ contracts.get('/:network/details/:contractId/', async (req, res, next) => {
     try {
         const {contractId, network} = req.params;
 
-        const results = await digitalOraclesService.getContract(getNetwork(network), contractId);
+        const validatedNetwork = getNetwork(network);
+
+        const details = await digitalOraclesService.getContractDetails(validatedNetwork, contractId);
+        const terms = await digitalOraclesService.getContractTerms(validatedNetwork, contractId);
+        const invoiceIds = await digitalOraclesService.getContractInvoices(validatedNetwork, contractId);
+
+        const invoices = {};
+        _.forEach(invoiceIds, async (invoiceId) => {
+            invoices[invoiceId] = await digitalOraclesService.getContractInvoiceDetails(validatedNetwork, invoiceId);
+        });
 
         return res
             .status(200)
-            .json(results);
-    } catch (e) {
-        next(e);
-    }
-});
-
-contracts.post('/invoices/add', async (req, res, next) => {
-    try {
-        const {network, contractId, invoiceId} = req.body;
-
-        const results = await digitalOraclesService.addInvoiceToContract(getNetwork(network), contractId, invoiceId);
-
-        return res
-            .status(200)
-            .json(results);
-    } catch (e) {
-        next(e);
+            .json({
+                ...details,
+                ...terms,
+                invoiceIds,
+                invoices: invoices
+            });
+    } catch (error) {
+        next(error);
     }
 });
 
@@ -171,13 +170,15 @@ contracts.get('/:network/invoices/:contractId/', async (req, res, next) => {
     try {
         const {network, contractId} = req.body;
 
-        const results = await digitalOraclesService.getContractInvoices(getNetwork(network), contractId);
+        const invoiceIds = await digitalOraclesService.getContractInvoices(getNetwork(network), contractId);
 
         return res
             .status(200)
-            .json(results);
-    } catch (e) {
-        next(e);
+            .json({
+                invoiceIds: invoiceIds
+            });
+    } catch (error) {
+        next(error);
     }
 });
 

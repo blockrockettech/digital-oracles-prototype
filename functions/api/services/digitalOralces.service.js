@@ -4,6 +4,14 @@ const {httpProvider} = require("../web3/web3Provider");
 const DigitalOraclesAbi = require('../web3/abi/digitalOracles.abi');
 const gasPriceService = require('./gasPriceApi.service');
 const GasToHighError = require('../errors/GasToHighError');
+const {
+    toEnumString,
+    InvoiceStatus,
+    ClientPaymentTerms,
+    ContractDuration,
+    ContractState,
+    PaymentFrequency
+} = require("../data/contractTypes");
 
 const privateKey = require('../web3/privateKey');
 
@@ -129,34 +137,66 @@ class DigitalOraclesService {
         return this.sendTxs(web3, data, address, network);
     }
 
-    async addInvoiceToContract(network, contractId, invoiceId) {
-        console.log(`Add invoice to contract for network [${network}]`, contractId, invoiceId);
+    async addInvoiceToContract(network, contractId, invoiceId, invoiceState) {
+        console.log(`Add invoice to contract for network [${network}]`, contractId, invoiceId, invoiceState);
 
         const web3 = httpProvider(network);
         const address = getAddress(network);
         const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
 
-        const data = DigitalOracles.methods.addInvoiceToContract(contractId, invoiceId).encodeABI();
+        const data = DigitalOracles.methods.addInvoiceToContract(contractId, invoiceId, invoiceState).encodeABI();
 
         return this.sendTxs(web3, data, address, network);
     }
 
-    async getContract(network, contractId) {
-        console.log(`Get contract for network [${network}]`, contractId);
+    async updateInvoiceState(network, contractId, invoiceId, invoiceState) {
+        console.log(`Add invoice to contract for network [${network}]`, contractId, invoiceId, invoiceState);
 
         const web3 = httpProvider(network);
         const address = getAddress(network);
         const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
 
-        const result = await DigitalOracles.methods.getContract(contractId).call();
+        const data = DigitalOracles.methods.updateInvoiceState(contractId, invoiceId, invoiceState).encodeABI();
+
+        return this.sendTxs(web3, data, address, network);
+    }
+
+    async getContractDetails(network, contractId) {
+        console.log(`Get contract details for network [${network}]`, contractId);
+
+        const web3 = httpProvider(network);
+        const address = getAddress(network);
+        const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
+
+        const result = await DigitalOracles.methods.getContractDetails(contractId).call();
 
         return {
             creationDate: result.creationDate,
+            startDate: result.startDate,
+            endDate: result.endDate,
             partyA: result.partyA,
             partyB: result.partyB,
-            state: result.state,
-            contractData: result.contractData,
-            invoiceIds: result.invoiceIds
+            state: toEnumString(ContractState, result.state),
+            duration: toEnumString(ContractDuration, result.duration),
+            contractData: result.contractData
+        };
+    }
+
+    async getContractTerms(network, contractId) {
+        console.log(`Get contract terms for network [${network}]`, contractId);
+
+        const web3 = httpProvider(network);
+        const address = getAddress(network);
+        const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
+
+        const result = await DigitalOracles.methods.getContractTerms(contractId).call();
+
+        return {
+            contractHasValue: result.contractHasValue,
+            paymentFrequency: toEnumString(PaymentFrequency, result.paymentFrequency),
+            paymentFrequencyValue: result.paymentFrequencyValue,
+            clientPaymentTerms: toEnumString(ClientPaymentTerms, result.clientPaymentTerms),
+            clientPaymentTermsValue: result.clientPaymentTermsValue
         };
     }
 
@@ -169,8 +209,24 @@ class DigitalOraclesService {
 
         const {invoiceIds} = await DigitalOracles.methods.getContractInvoices(contractId).call();
 
+        return invoiceIds.map((i) => i.toString());
+    }
+
+    async getContractInvoiceDetails(network, invoiceId) {
+        console.log(`Get contract invoices for network [${network}]`, invoiceId);
+
+        const web3 = httpProvider(network);
+        const address = getAddress(network);
+        const DigitalOracles = new web3.eth.Contract(DigitalOraclesAbi, address);
+
+        const {
+            invoiceStatus,
+            contractId
+        } = await DigitalOracles.methods.getContractInvoiceDetails(invoiceId).call();
+
         return {
-            invoiceIds
+            invoiceStatus: toEnumString(InvoiceStatus, invoiceStatus),
+            contractId: contractId,
         };
     }
 
@@ -213,13 +269,13 @@ class DigitalOraclesService {
                     });
                 })
                 // If a out of gas error, the second parameter is the receipt.
-                .on('error', (error) => {
+                .on('error', (error, receipt) => {
                     console.warn('Failed to submit transaction', error);
                     reject({
-                        success: true,
+                        success: false,
                         address: to,
                         network,
-                        error: error
+                        error: error.message
                     });
                 });
         });

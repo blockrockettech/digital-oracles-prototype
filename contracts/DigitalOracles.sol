@@ -271,7 +271,7 @@ contract DigitalOracles is WhitelistedRole {
 
         // Invoice mapping validation
         require(contracts[_contractId].state == State.Pending || contracts[_contractId].state == State.Approved, "Contract not in pending or approved state");
-        require(invoiceToContractId[_invoiceId] == 0, "Contract add invoice to multiple contracts");
+        require(invoiceToContractId[_invoiceId] == 0, "Cannot add invoice to multiple contracts");
         require(invoiceToInvoiceStatus[_invoiceId] == InvoiceStatus.Blank, "Cannot add a invoice as already created");
 
         // TODO the below is GAS expensive (check for optimisations)

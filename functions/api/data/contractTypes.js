@@ -49,8 +49,19 @@ module.exports = {
     fromEnumString(enumType, field) {
         const convertedValue = enumType[field];
         if (!convertedValue) {
-            throw new Error(`Expected one of [${_.keys(enumType)}]`);
+            throw new Error(`Expected one of [${_.keys(enumType)}]] - got [${field}]`);
         }
         return convertedValue;
+    },
+    toEnumString(enumType, rawValue) {
+        const found = _.findKey(enumType, (value, key) => {
+            if (_.toNumber(value) === _.toNumber(rawValue)) {
+                return key;
+            }
+        });
+        if (!found) {
+            throw new Error(`Expected one of [${_.values(enumType)}] - got [${rawValue}]`);
+        }
+        return found;
     }
 };

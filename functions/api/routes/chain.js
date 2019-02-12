@@ -73,20 +73,17 @@ chain.get('/:network/account/balance', async (req, res, next) => {
     try {
         const {network} = req.params;
 
-        const accountBalance = await blockchainService.getAccountBalance(getNetwork(network));
+        const balances = await blockchainService.getAccountBalance(getNetwork(network));
 
         return res
             .status(200)
-            .json({
-                accountBalanceInWei: accountBalance,
-                accountBalanceInEth: Web3.utils.fromWei(accountBalance, 'ether')
-            });
+            .json(balances);
     } catch (e) {
         next(e);
     }
 });
 
-chain.get('/:network/account/nonce', async (req, res) => {
+chain.get('/:network/account/nonce', async (req, res, next) => {
     try {
         const {network} = req.params;
 

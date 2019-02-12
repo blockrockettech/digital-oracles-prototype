@@ -22,20 +22,161 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"network\": 3,\n    \"contractId\": 2,\n    \"partyA\": 1\n}"
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"startDate\": 0,\n    \"endDate\": 0,\n    \"partyA\": 1,\n    \"partyB\": 1,\n    \"contractData\": \"ipfs-1234-abc-hash\",\n    \"duration\": \"FixedTerm\",\n    \"contractHasValue\": false,\n    \"paymentFrequency\": \"Daily\",\n    \"paymentFrequencyValue\": 0,\n    \"clientPaymentTerms\": \"UponReceipt\",\n    \"clientPaymentTermsValue\": 0\n}"
 						},
 						"url": {
-							"raw": "https://us-central1-digital-oracles.cloudfunctions.net/api/contracts/create",
-							"protocol": "https",
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/create",
+							"protocol": "http",
 							"host": [
-								"us-central1-digital-oracles",
-								"cloudfunctions",
-								"net"
+								"localhost"
 							],
+							"port": "5000",
 							"path": [
+								"digital-oracles",
+								"us-central1",
 								"api",
 								"contracts",
 								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contract State",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"state\": \"Pending\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/update/state",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"contracts",
+								"update",
+								"state"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contract StartDate",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"startDate\": \"12345678\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/update/startDate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"contracts",
+								"update",
+								"startDate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contract EndDate",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"endDate\": \"12345678\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/update/endDate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"contracts",
+								"update",
+								"endDate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contract EndDate Copy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"contractHasValue\": true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/update/contractHasValue",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"contracts",
+								"update",
+								"contractHasValue"
 							]
 						}
 					},
@@ -55,7 +196,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"network\": 3,\n    \"contractId\": 1,\n    \"contractData\": \"a-ipfs-hash\",\n    \"partyB\": 1\n}"
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1\n}"
 						},
 						"url": {
 							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/approve",
@@ -110,7 +251,7 @@
 					"response": []
 				},
 				{
-					"name": "Set Party B on Contract",
+					"name": "Replace Contract",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -123,10 +264,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"partyB\": 1\n}"
+							"raw": "{\n    \"network\": 5777,\n    \"originalContractId\": 1,\n    \"replacementContractId\": 2\n}"
 						},
 						"url": {
-							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/update/partyB",
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/replace",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -137,8 +278,7 @@
 								"us-central1",
 								"api",
 								"contracts",
-								"update",
-								"partyB"
+								"replace"
 							]
 						}
 					},
@@ -164,19 +304,20 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://us-central1-digital-oracles.cloudfunctions.net/api/contracts/3/details/2",
-							"protocol": "https",
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/5777/details/1",
+							"protocol": "http",
 							"host": [
-								"us-central1-digital-oracles",
-								"cloudfunctions",
-								"net"
+								"localhost"
 							],
+							"port": "5000",
 							"path": [
+								"digital-oracles",
+								"us-central1",
 								"api",
 								"contracts",
-								"3",
+								"5777",
 								"details",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -199,10 +340,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"partyB\": 1\n}"
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1\n}"
 						},
 						"url": {
-							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/5777/details/1",
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/5777/invoices/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -214,43 +355,8 @@
 								"api",
 								"contracts",
 								"5777",
-								"details",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add Invoice to Contract",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"invoiceId\": 2\n}"
-						},
-						"url": {
-							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/invoices/add",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"digital-oracles",
-								"us-central1",
-								"api",
-								"contracts",
 								"invoices",
-								"add"
+								"1"
 							]
 						}
 					},
@@ -281,18 +387,19 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://us-central1-digital-oracles.cloudfunctions.net/api/chain/3/0x44cf9a40cd11a241da5f52b23602d90a6e8463e5aebf3ba6635f63af2e55bb8b/receipt",
-							"protocol": "https",
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/5777/0x74057df0fe653adbeff5587fe34e4556a19b9be9dfd1f39326a46da13afa2e83/receipt",
+							"protocol": "http",
 							"host": [
-								"us-central1-digital-oracles",
-								"cloudfunctions",
-								"net"
+								"localhost"
 							],
+							"port": "5000",
 							"path": [
+								"digital-oracles",
+								"us-central1",
 								"api",
 								"chain",
-								"3",
-								"0x44cf9a40cd11a241da5f52b23602d90a6e8463e5aebf3ba6635f63af2e55bb8b",
+								"5777",
+								"0x74057df0fe653adbeff5587fe34e4556a19b9be9dfd1f39326a46da13afa2e83",
 								"receipt"
 							]
 						}
@@ -319,7 +426,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/3/0xeefc6b057ba46749d8c23cd2e99720a28b4b97176b5901530d0c9a2558092599/raw",
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/5777/0x74057df0fe653adbeff5587fe34e4556a19b9be9dfd1f39326a46da13afa2e83/raw",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -330,8 +437,8 @@
 								"us-central1",
 								"api",
 								"chain",
-								"3",
-								"0xeefc6b057ba46749d8c23cd2e99720a28b4b97176b5901530d0c9a2558092599",
+								"5777",
+								"0x74057df0fe653adbeff5587fe34e4556a19b9be9dfd1f39326a46da13afa2e83",
 								"raw"
 							]
 						}
@@ -487,6 +594,118 @@
 								"5777",
 								"account",
 								"nonce"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "invoice",
+			"item": [
+				{
+					"name": "Add Invoice to Contract",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"invoiceId\": 3\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/invoices/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"invoices",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Invoice for Contract",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"invoiceId\": 3,\n    \"invoiceState\": \"Paid\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/invoices/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"invoices",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Invoices details",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"invoiceId\": 3,\n    \"invoiceState\": \"Paid\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/invoices/5777/id/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"digital-oracles",
+								"us-central1",
+								"api",
+								"invoices",
+								"5777",
+								"id",
+								"2"
 							]
 						}
 					},

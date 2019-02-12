@@ -30,7 +30,11 @@ class BlockchainService {
         const web3 = httpProvider(network);
         const address = web3.eth.accounts.privateKeyToAccount(privateKey).address;
         console.log(`Getting address balance on network [${network}]`, address);
-        return web3.eth.getBalance(address);
+        const accountBalance = await web3.eth.getBalance(address);
+        return {
+            accountBalanceInWei: accountBalance,
+            accountBalanceInEth: web3.utils.fromWei(accountBalance, 'ether')
+        };
     }
 
     async getLatestBlockNumber(network) {

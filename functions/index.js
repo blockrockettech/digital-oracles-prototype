@@ -25,22 +25,29 @@ app.use(expressWinston.logger({
 }));
 
 const contract = require('./api/routes/contract');
+const invoice = require('./api/routes/invoice');
 const chain = require('./api/routes/chain');
 
 app.use('/contracts', contract);
+app.use('/invoices', invoice);
 app.use('/chain', chain);
 
-app.use(function (err, req, res, next) {
-    console.error(err.stack);
+// N.B: final param needed - do not remove
+app.use(function (err, req, res, _) {
     if (err.name === 'GasToHighError') {
         return res.status(400).json({
+            success: false,
             error: 'GAS_TO_HIGH'
         });
+    } else if (err instanceof Error) {
+        res.status(500).json({
+            success: false,
+            error: err.name,
+            message: err.message
+        });
+    } else {
+        res.status(500).json(err);
     }
-    res.status(500).send({
-        error: err.name,
-        stack: err.stack
-    });
 });
 
 // Expose Express API as a single Cloud Function:
