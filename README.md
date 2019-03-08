@@ -87,8 +87,9 @@ The project contains the following:
         "transactionIndex": 3
     }
     ```
-    * When the `status` is `false` or `0x0` (zero) the txs has **failed**
-    * When the `status` is `true` or `0x1` (one) the txs has been mined **successfully** and the next txs can be sent
+    * The `success` field is the property which needs to be checked
+      * `success` can be `true` or `false` depending on the outcome of the call
+         * Under the hood this looks at two properties, `status` and the presence of `blockNumber`
     * The calling application will need to stack up txs and process them sequentially
     * This post -> poll -> success/fail process is as the blockchain is async and there is no guarantee when or if the txs will be included in a block
 
