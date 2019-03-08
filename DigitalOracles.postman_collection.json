@@ -22,18 +22,17 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"network\": 5777,\n    \"contractId\": 1,\n    \"startDate\": 0,\n    \"endDate\": 0,\n    \"partyA\": 1,\n    \"partyB\": 1,\n    \"contractData\": \"ipfs-1234-abc-hash\",\n    \"duration\": \"FixedTerm\",\n    \"contractHasValue\": false,\n    \"paymentFrequency\": \"Daily\",\n    \"paymentFrequencyValue\": 0,\n    \"clientPaymentTerms\": \"UponReceipt\",\n    \"clientPaymentTermsValue\": 0\n}"
+							"raw": "{\n    \"network\": 3,\n    \"contractId\": 1,\n    \"startDate\": 0,\n    \"endDate\": 0,\n    \"partyA\": 1,\n    \"partyB\": 1,\n    \"contractData\": \"ipfs-1234-abc-hash\",\n    \"duration\": \"FixedTerm\",\n    \"contractHasValue\": false,\n    \"paymentFrequency\": \"Daily\",\n    \"paymentFrequencyValue\": 0,\n    \"clientPaymentTerms\": \"UponReceipt\",\n    \"clientPaymentTermsValue\": 0\n}"
 						},
 						"url": {
-							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/create",
-							"protocol": "http",
+							"raw": "https://us-central1-digital-oracles.cloudfunctions.net/api/contracts/create",
+							"protocol": "https",
 							"host": [
-								"localhost"
+								"us-central1-digital-oracles",
+								"cloudfunctions",
+								"net"
 							],
-							"port": "5000",
 							"path": [
-								"digital-oracles",
-								"us-central1",
 								"api",
 								"contracts",
 								"create"
@@ -304,7 +303,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/5777/details/1",
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/contracts/3/details/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -315,7 +314,7 @@
 								"us-central1",
 								"api",
 								"contracts",
-								"5777",
+								"3",
 								"details",
 								"1"
 							]
@@ -387,7 +386,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/5777/0x74057df0fe653adbeff5587fe34e4556a19b9be9dfd1f39326a46da13afa2e83/receipt",
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/3/0x7d1a59a46bf92f179d000815a2ccefa6e12ce680449cfd2ca0fac0379bb7a2de/receipt",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -398,8 +397,8 @@
 								"us-central1",
 								"api",
 								"chain",
-								"5777",
-								"0x74057df0fe653adbeff5587fe34e4556a19b9be9dfd1f39326a46da13afa2e83",
+								"3",
+								"0x7d1a59a46bf92f179d000815a2ccefa6e12ce680449cfd2ca0fac0379bb7a2de",
 								"receipt"
 							]
 						}
@@ -426,7 +425,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/5777/0x74057df0fe653adbeff5587fe34e4556a19b9be9dfd1f39326a46da13afa2e83/raw",
+							"raw": "http://localhost:5000/digital-oracles/us-central1/api/chain/3/0xce08f00cec646edf7e602a415090493e712b11d6b9a0a15dccf81fe06cd469a6/raw",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -437,8 +436,8 @@
 								"us-central1",
 								"api",
 								"chain",
-								"5777",
-								"0x74057df0fe653adbeff5587fe34e4556a19b9be9dfd1f39326a46da13afa2e83",
+								"3",
+								"0xce08f00cec646edf7e602a415090493e712b11d6b9a0a15dccf81fe06cd469a6",
 								"raw"
 							]
 						}
