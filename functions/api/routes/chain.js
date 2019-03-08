@@ -22,9 +22,15 @@ chain.get('/:network/:txsHash/raw', async (req, res, next) => {
             });
         }
 
+        const currentBlockNumber = await blockchainService.getLatestBlockNumber(getNetwork(network));
+
         return res
             .status(200)
-            .json(results);
+            .json({
+                ...results,
+                success: results.blockNumber !== null, 
+                confirmations: results.blockNumber !== null ? currentBlockNumber - results.blockNumber : 0
+            });
     } catch (e) {
         next(e);
     }
@@ -38,16 +44,22 @@ chain.get('/:network/:txsHash/receipt', async (req, res, next) => {
 
         if (!results) {
             return res.status(400).json({
-                notFound: true,
+                success: false,
                 txsNotFound: true,
                 txsHash,
                 network
             });
         }
 
+        const currentBlockNumber = await blockchainService.getLatestBlockNumber(getNetwork(network));
+
         return res
             .status(200)
-            .json(results);
+            .json({
+                ...results,
+                success: results.status === '0x1', // 0x1 == status, 0x0 == status
+                confirmations: results.blockNumber !== null ? currentBlockNumber - results.blockNumber : 0
+            });
     } catch (e) {
         next(e);
     }
