@@ -35,6 +35,12 @@ The project contains the following:
         * ensure that the deployed contract address is correct - updating it here `./functions/api/web3/network.js` 
     * Start the API `./run_app.sh` **(permission will need to be granted in order to run the app under the same project name)**
 
+* Setting up local config
+    * Since we use environment variables for the API you will need to take one extra step to run the API locally
+    * First download the remote config to the `funtcions` folder
+        * e.g. `firebase functions:config:get > ./functions/.runtimeconfig.json` - ensure this file is **NOT** committed into the source code
+    * Once you have this start the application up as normal
+
 ## SmartContract Design
 
 * The smart contract is a simple source of truth for when two parties agree on the state of a contractual agreement
