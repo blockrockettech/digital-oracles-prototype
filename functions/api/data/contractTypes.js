@@ -23,7 +23,8 @@ const PaymentFrequency = {
     Yearly: 5,              // invoiceable yearly
     OnCompletion: 6,        // when work is complete
     PercentageUpFront: 7,   // a percentage upfront, remaining on completion
-    OnDate: 8               // On a specific date
+    OnDate: 8,              // On a specific date
+    OneOff: 9               // A one off payment
 };
 
 const ClientPaymentTerms = {

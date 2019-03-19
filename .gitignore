@@ -9,3 +9,4 @@
 *.log
 /coverageEnv/
 /coverage/
+/functions/.runtimeconfig.json

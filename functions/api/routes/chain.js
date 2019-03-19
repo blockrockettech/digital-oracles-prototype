@@ -28,7 +28,7 @@ chain.get('/:network/:txsHash/raw', async (req, res, next) => {
             .status(200)
             .json({
                 ...results,
-                success: results.blockNumber !== null, 
+                success: results.blockNumber !== null,
                 confirmations: results.blockNumber !== null ? currentBlockNumber - results.blockNumber : 0
             });
     } catch (e) {

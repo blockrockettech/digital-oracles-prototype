@@ -50,7 +50,8 @@ contract DigitalOracles is WhitelistedRole {
         Yearly, // invoiceable yearly
         OnCompletion, // when work is complete
         PercentageUpFront, // a percentage upfront, remaining on completion
-        OnDate // On a specific date
+        OnDate, // On a specific date
+        OneOff // One off payment type
     }
 
     enum ClientPaymentTerms {

@@ -1,9 +1,13 @@
 const _ = require('lodash');
 
+const authTokenChecker = require('./middlewares/authTokenChecker');
+
 const contracts = require('express').Router();
 
 const digitalOraclesService = require('../services/digitalOralces.service');
+
 const {getNetwork} = require("../web3/network");
+
 const {
     fromEnumString,
     ClientPaymentTerms,
@@ -11,6 +15,9 @@ const {
     ContractState,
     PaymentFrequency
 } = require("../data/contractTypes");
+
+// Set this middleware as early as possible to protect all routes below
+contracts.use(authTokenChecker);
 
 contracts.post('/create', async (req, res, next) => {
     try {
