@@ -27,10 +27,12 @@ app.use(expressWinston.logger({
 const contract = require('./api/routes/contract');
 const invoice = require('./api/routes/invoice');
 const chain = require('./api/routes/chain');
+const fake = require('./api/routes/fakeNegotiationApi');
 
 app.use('/contracts', contract);
 app.use('/invoices', invoice);
 app.use('/chain', chain);
+app.use('/fake/negotiate', fake);
 
 // N.B: final param needed - do not remove
 app.use(function (err, req, res, _) {
