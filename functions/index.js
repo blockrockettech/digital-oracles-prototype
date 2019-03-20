@@ -7,7 +7,9 @@ const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
 
-app.use(cors({origin: true}));
+app.use(cors());
+app.options('*', cors({origin: false}));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
