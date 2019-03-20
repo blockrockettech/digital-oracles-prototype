@@ -97,7 +97,7 @@ fakeNegotiation.post('/saveTermsOfService', async (req, res, next) => {
         }
 
         // Set on dummy object
-        dummyData[contractId] = foundContract;
+        dummyData[_.toNumber(contractId)] = foundContract;
 
         console.log(dummyData);
 
@@ -116,7 +116,7 @@ fakeNegotiation.get('/findContractNegotiation/:contractId', async (req, res, nex
 
         const {contractId} = req.params;
 
-        const foundContract = dummyData[contractId];
+        const foundContract = dummyData[_.toNumber(contractId)];
 
         console.log(dummyData);
 
