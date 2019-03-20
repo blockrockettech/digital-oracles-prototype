@@ -16,19 +16,25 @@ let dummyData = {};
 
 fakeNegotiation.post('/init', async (req, res, next) => {
     try {
-        const {client, supplier, projectId} = req.body;
+        const {clientId, supplierId, projectId} = req.body;
 
-        // TODO generate from DB
         const contractId = Math.floor(Math.random() * 100000);
 
         const contract = {
+            // TODO generate from DB
             contractId: contractId,
+
+            // Mu assumption is that a contract requires a client, supplier and project to work
             projectId: projectId,
+            clientId: clientId,
+            supplierId: supplierId,
+
+            // Default start to INIT
             state: CONTRACT_STATES.INITIATED_AGREEMENT,
-            // FIXME - I am placing the full client and supplier in here but it should only be the IDs
-            client,
-            supplier,
+
+            // Details block is terms of service, maybe rename
             details: {
+                lastUpdatedDatetime: Date.now(),
                 state: SECTION_STATES.INITIATED,
 
                 // Changes represent the an ordered list of changes for both parties
@@ -58,24 +64,30 @@ fakeNegotiation.post('/init', async (req, res, next) => {
     }
 });
 
-fakeNegotiation.post('/saveDetails', async (req, res, next) => {
+fakeNegotiation.post('/saveTermsOfService', async (req, res, next) => {
     try {
         console.log(req.body);
 
-        // FIXME int he real world you will need to look up the correct properties for, relying on editor isnt great...
-        const {clientId, details, editor, projectId, supplierId, contractId} = req.body;
+        // FIXME in the real world you will need to look up the correct properties for
+        // FIXME we should really work this out based on currently logged in user which I dont have in the fake API
+        const {contractId, details, editor, projectId, supplierId, clientId} = req.body;
 
         const foundContract = dummyData[contractId];
+
+        const dateSaved = Date.now();
 
         // Push a change set in so we can then filter on these to get the latest
         const changeSet = {
             ...details,
             editor: editor,
-            added: Date.now()
+            savedDatetime: dateSaved
         };
-        foundContract.details.changes.push(changeSet);
 
-        // update the working version
+        // Push the date set and update timestamp
+        foundContract.details.changes.push(changeSet);
+        foundContract.details.lastUpdatedDatetime = dateSaved;
+
+        // update the working version and state accordingly
         if (editor === 'client') {
             foundContract.details.state = 'CLIENT_LAST_UPDATED';
             foundContract.details.client = changeSet;
@@ -93,6 +105,24 @@ fakeNegotiation.post('/saveDetails', async (req, res, next) => {
             .status(200)
             .json(foundContract);
 
+    } catch (error) {
+        next(error);
+    }
+});
+
+fakeNegotiation.get('/findContractNegotiation/:contractId', async (req, res, next) => {
+    try {
+        console.log(req.params);
+
+        const {contractId} = req.params;
+
+        const foundContract = dummyData[contractId];
+
+        console.log(dummyData);
+
+        return res
+            .status(200)
+            .json(foundContract);
     } catch (error) {
         next(error);
     }
