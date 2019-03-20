@@ -4,14 +4,15 @@ const _ = require('lodash');
 const fakeNegotiation = require('express').Router();
 
 const CONTRACT_STATES = {
-    INITIATED_AGREEMENT: "INITIATED_AGREEMENT"
+    INITIATED_AGREEMENT: "INITIATED_AGREEMENT",
+    TERMS_AGREED: "TERMS_AGREED"
 };
 
 const SECTION_STATES = {
     INITIATED: "INITIATED",
     CLIENT_LAST_UPDATED: "CLIENT_LAST_UPDATED",
     SUPPLIER_LAST_UPDATED: "SUPPLIER_LAST_UPDATED",
-    TERMS_ACCEPTED: "TERMS_ACCEPTED"
+    ACCEPTED: "ACCEPTED"
 };
 
 let dummyData = {};
@@ -50,6 +51,21 @@ fakeNegotiation.post('/init', async (req, res, next) => {
                 supplier: {
                     ...blankDetailsBlock()
                 }
+            },
+            clauses: {
+                lastUpdatedDatetime: Date.now(),
+                state: SECTION_STATES.INITIATED,
+
+                // Changes represent the an ordered list of changes for both parties
+                changes: [],
+
+                // Client and supplier objects represent the latest changes for both parties
+                client: [{
+                    ...blankSectionsBlock()
+                }],
+                supplier: [{
+                    ...blankSectionsBlock()
+                }]
             }
         };
 
@@ -92,7 +108,6 @@ fakeNegotiation.post('/saveTermsOfService', async (req, res, next) => {
 
         // Check if its only one side who has made changes so far
         const allChangeMadeBySingleParty = _.every(contract.details.changes, (change) => change.editor === editor);
-        console.log("allChangeMadeBySingleParty", allChangeMadeBySingleParty);
 
         // update the working version and state accordingly
         if (editor === 'client') {
@@ -137,9 +152,12 @@ fakeNegotiation.post('/acceptTermsOfService', async (req, res, next) => {
 
         const contract = _.clone(dummyData[contractId]);
 
+        // Set state so we can move on to the next section
+        contract.state = CONTRACT_STATES.TERMS_AGREED;
+
         // Push the date set and update timestamp
         contract.details.lastUpdatedDatetime = Date.now();
-        contract.details.state = SECTION_STATES.TERMS_ACCEPTED;
+        contract.details.state = SECTION_STATES.ACCEPTED;
 
         // update the working version to be the accepted parties selection
         if (editor === 'client') {
@@ -196,6 +214,14 @@ const blankDetailsBlock = () => {
         noticePeriodDays: null,
         projectEndDate: null,
         projectStartDate: null
+    };
+};
+
+const blankSectionsBlock = () => {
+    return {
+        id: 1,
+        heading: null,
+        body: null
     };
 };
 
